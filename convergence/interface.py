@@ -408,11 +408,22 @@ class Convergence(object):
         
         # Right so we need to build a bunch of records right. Those records will
         # need headings so I can do that now I guess. Might get a coke first.
-        record_headings = ['r21', 'r32', 'p', 'f_exact', 'e_approx', 'e_extrap',
-                           'gci_fine', 'gci_coarse']
-                           
-        head_keys = ['ratio_21', 'ratio_32', 'p', 'f_exact', 'e_a', 'e_ext',
-                     'gci_f', 'gci_c']
+        record_headings = ['r21', 'r32', 'p', 'f_exact']
+        head_keys = ['ratio_21', 'ratio_32', 'p', 'f_exact']
+        
+        if self.f_anal is not None:
+            record_headings += ["f_analytic", "f_delta"]
+            head_keys += ["f_anal", "f_delta"]
+            
+        record_headings += ['e_approx', 'e_extrap']
+        head_keys += ['e_a', 'e_ext']
+        
+        if self.f_anal is not None:
+            record_headings += ["e_analytic"]
+            head_keys += ["e_anal"]
+                          
+        record_headings += ['gci_fine', 'gci_coarse']
+        head_keys += ['gci_f', 'gci_c']
                            
         # OK, better make a table
         fine_table = Table('Grids')
@@ -560,9 +571,9 @@ def main():
                         help=("output file path"),
                         default='verify_report.txt')
                         
-    parser.add_argument("-m", "--metric",
+    parser.add_argument("-a", "--analytical",
                         type=str,
-                        help=("Name of metric to verify"))
+                        help=("Expected analytical value"))
                         
     parser.add_argument("file",
                         type=str,
@@ -571,15 +582,15 @@ def main():
   
     args = parser.parse_args()
     
-    in_path     = args.file
-    out_path    = args.out 
-    metric      = args.metric
+    in_path = args.file
+    out_path = args.out 
+    analytical = args.analytical
             
     # Read in the file
     main_list = simple_read(in_path)
     
     # Run convergence study
-    mainver = Convergence(main_list, metric)
+    mainver = Convergence(main_list, f_anal=analytical)
         
     # Write the report
     mainver.add_file(out_path, write_mode='w')
