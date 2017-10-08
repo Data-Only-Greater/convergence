@@ -7,7 +7,7 @@ Created on Sun Oct 08 09:10:28 2017
 
 import os
 
-from verify import Verify, simple_read
+from convergence import Convergence, simple_read
 
 this_dir_path = os.path.dirname(__file__)
 data_dir_path = os.path.join(this_dir_path, "..", "data")
@@ -23,8 +23,8 @@ def test_main(tmpdir):
     # Read in the file
     main_list = simple_read(in_path)
     
-    # Run verify
-    mainver = Verify(main_list)
+    # Run convergence study
+    mainver = Convergence(main_list)
         
     # Write the report
     mainver.add_file(out_path, write_mode='w')

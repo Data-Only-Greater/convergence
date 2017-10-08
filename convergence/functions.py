@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
- -- verify package  -------------------------------------------------------
+ -- convergence package  -------------------------------------------------------
  
    Performs several verification calculations given a file of grid spacings 
    and some observed quantity corresponding to each grid spacing.

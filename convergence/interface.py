@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
- -- verify package  -------------------------------------------------------
+ -- convergence package  -------------------------------------------------------
  
    Performs several verification calculations given a file of grid spacings 
    and some observed quantity corresponding to each grid spacing.
@@ -44,7 +44,7 @@ from .functions import (order_of_convergence,
 from .tables import Record, Table
 
 
-class Verify(object):
+class Convergence(object):
     """ Calculate convergence for a set of grids (each grid being of the
     form [grid spacing, value]) examining the order of convergence, richardson
     extrapolated value to zero, GCI, and test whether the grids are in the
@@ -69,7 +69,7 @@ class Verify(object):
         self.zero_tol = zero_tol
 
         # Set a log
-#        self._log = logging.getLogger("fifthwave.verify.Verify")
+#        self._log = logging.getLogger("fifthwave.verify.Convergence")
         
         # Sort the given grid list at this stage
         self._sort_list(grid_list)
@@ -551,7 +551,7 @@ def triplets(lst):
 def main():
     
     # Prepare command line parser              
-    desStr = "Perform grid verification study on input file."
+    desStr = "Perform grid convergence study on input file."
 
     parser = argparse.ArgumentParser(description=desStr)
             
@@ -578,8 +578,8 @@ def main():
     # Read in the file
     main_list = simple_read(in_path)
     
-    # Run verify
-    mainver = Verify(main_list, metric)
+    # Run convergence study
+    mainver = Convergence(main_list, metric)
         
     # Write the report
     mainver.add_file(out_path, write_mode='w')

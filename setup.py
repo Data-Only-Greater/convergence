@@ -1,7 +1,7 @@
 
 from setuptools import setup
 
-setup(name='verify',
+setup(name='convergence',
       version='0.1',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
@@ -9,9 +9,9 @@ setup(name='verify',
       author='Mathew Topper',
       author_email='dataonlygreater@gmail.com',
       url='https://www.python.org/sigs/distutils-sig/',
-      packages=['verify'],
-      entry_points = { 'console_scripts': 
-                           ['grid-verify = verify:main'] }
+      packages=['convergence'],
+      entry_points = {'console_scripts': 
+                           ['grid-convergence = convergence:main']},
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
