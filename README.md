@@ -58,7 +58,7 @@ grid-convergence /path/to/data/file
 
 By default, the results of the program are written to a file called 
 _verify_report.txt_ in the calling directory. The file name can be changed
-using the _-0_ or _--out__ command line options. The format of the file
+using the _-o_ or _--out_ command line options. The format of the file
 is as follows:
 
     --- VERIFY: Performs verification calculations --- 
