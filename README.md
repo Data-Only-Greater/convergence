@@ -3,6 +3,19 @@
 A Python program to Perform Calculations Associated with a Grid Convergence
 Study.
 
+******
+
+[![](https://img.shields.io/badge/python-2.7-blue.svg)](https://www.python.org/download/releases/2.7.0/) 
+[![](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/download/releases/3.5.0/) 
+[![](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/download/releases/3.6.0/) 
+[![](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/download/releases/3.7.0/) 
+[![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/download/releases/3.8.0/) 
+
+[![](https://img.shields.io/badge/platform-linux-lightgrey.svg)]()
+[![](https://img.shields.io/travis/H0R5E/convergence)](https://travis-ci.com/github/H0R5E/convergence)
+
+[![](https://img.shields.io/codecov/c/github/h0r5e/convergence)](https://codecov.io/gh/H0R5E/convergence)
+
 ## Introduction
 
 This is a port of verify.f90, a program provided as part of the NASA Examining
