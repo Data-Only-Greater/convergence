@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
  -- convergence package  -------------------------------------------------------
  
@@ -24,16 +22,15 @@ Adapted from:
     Nov '11: Updated to reflect Celik et al 2008.
 """
 
-__author__ = "Mathew Topper"
 __copyright__ = "Copyright 2011, SuperGen Marine"
-__licence__ = "GPL"
-__version__ = "trunk"
-__maintainer__ = "Mathew Topper"
-__email__ = "mathew.topper@ed.ac.uk"
-__status__ = "Development"
+
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
 
 
-class Record:
+class Record(object):
     """ A Record is a single line in a report containing values for the columns
     at a particular grid resolution etc.
     """
@@ -57,8 +54,10 @@ class Record:
         
         # If column values is given then call add_values
         if column_values is not None: self.add_values(column_values)
-
+        
 #        self._log = logging.getLogger("fifthwave.fifthwave.Record")
+        
+        return
         
     def read(self, text_line):
         
@@ -67,10 +66,11 @@ class Record:
         row_entries = text_line.split()
         
         val_string = ''
-
+        
         while row_entries[0] != '|':
+            
             val_string += row_entries.pop(0)
-
+            
             # Add a space if the next entry is not the separator
             if row_entries[0] != '|': val_string += ' '
         
@@ -79,7 +79,7 @@ class Record:
             self.data_point = float(val_string)
         except ValueError:
             self.data_point = val_string
-            
+        
         # Peel off the first separator
         del(row_entries[0])
         
@@ -90,15 +90,15 @@ class Record:
             
             # Make a string and add everything to it that is not the separator
             val_string = ''
-
+            
             while row_entries[0] != '|': val_string += row_entries.pop(0)
-
+            
             # Add to the values list depending on what was read.
             if val_string == '':
                 val_list.append(None)
             else:
                 val_list.append(float(val_string))
-                
+            
             # Peel off the separator
             del(row_entries[0])
         
@@ -106,13 +106,11 @@ class Record:
             
     def add_values(self, values):
         
-        # Using map here rather than zip is so that if some of the values are
-        # None then they still appear in the pairing.
-        for value, col_pair in map(None, values, self.col_pairs):
+        for value, col_pair in zip_longest(values, self.col_pairs):
             try:
                 coldex = self.col_pairs.index(col_pair)
                 self.col_pairs[coldex] = (col_pair[0], value)
-            except TypeError, e:
+            except TypeError as e:
 #                self._log.error("Could be too many values for number of \
 #                                 columns.")
                 raise e
@@ -134,11 +132,13 @@ class Record:
             except:
                 col_list.append(column)
                 val_list.append(value)
-                
+        
         # Load up the col_pairs
         self.col_pairs = [(column, value) for column, value in
                                                     zip(col_list, val_list)]
-                                                    
+        
+        return
+    
     def update_byrecord(self, record):
         
         # OK, start by making lists of the existing columns and values
@@ -160,9 +160,11 @@ class Record:
         # Load up the col_pairs
         self.col_pairs = [(column, value) for column, value in
                                                     zip(col_list, val_list)]
+        
+        return
 
 
-class Table:
+class Table(object):
     """ A Table is the bit that display records with values for column 
     headings at a particular data point. It can write new tables or read
     existing tables and update them. The columns can also be read separately.
@@ -174,15 +176,15 @@ class Table:
         self.row_type = row_type
         self._records = []
 #        self._log = logging.getLogger("fifthwave.fifthwave.Table")
-        
+    
     def reset_data(self):
         """ Clear the records in the Table."""
         self._records = []
-        
+    
     def reverse(self):
         """ Reverse the order of the records."""
         self._records.reverse()
-        
+    
     def order_rows(self, ordered_list):
         """ Reorder the list of records to the reverse of the given list.
         This will delete any data points not given in ordered_list. """
@@ -200,10 +202,10 @@ class Table:
                     new_records[datdex] = old_rec
                     
                     break
-                
+        
         # Weed out any remaining Nones.
-        self._records = filter(lambda a: a != None, new_records)
-
+        self._records = [a for a in new_records if a != None]
+    
     def column_read(self, get_strings):
         """ Read in an existing table and return the name of the columns
         in a list and the values in those columns in a list of lists. Assume the
@@ -238,12 +240,12 @@ class Table:
                 col_list[index].append(entry)
         
         return col_names, col_list
-
+    
     def read(self, get_strings):
         """ Read in an existing table given by a list of strings. This will 
         overwrite the row_type and update any existing records.
         """
-
+        
         # Collect the column headers
         column_line = get_strings.pop(0)
         col_list = column_line.split()
@@ -251,13 +253,14 @@ class Table:
         # Entries up to the first separator are the row_type so get it.
         # Make a string and add everything to it that is not the separator
         val_string = ''
-
+        
         while col_list[0] != '|':
+        
             val_string += col_list.pop(0)
-
+            
             # Add a space if the next entry is not the separator
             if col_list[0] != '|': val_string += ' '
-            
+        
         # If the val_string is not empty set the row_type.
         if len(val_string) > 0: self.row_type = val_string
         
@@ -271,20 +274,21 @@ class Table:
             
             # Make a string and add everything to it that is not the separator
             val_string = ''
-
+            
             while col_list[0] != '|':
+            
                 val_string += col_list.pop(0)
-
+                
                 # Add a space if the next entry is not the separator
                 if col_list[0] != '|': val_string += ' '
-
+            
             # Add to the values list depending on what was read.
             # Don't like this None case. Very ambiguous!
             if val_string == '':
                 read_columns.append(None)
             else:
                 read_columns.append(val_string)
-                
+            
             # Peel off the separator
             del(col_list[0])
         
@@ -294,7 +298,7 @@ class Table:
             new_record = Record(read_columns)
             new_record.read(line)
             self.add_record(new_record)
-        
+    
     def add_record(self, get_record):
         """ Add or update a record for the given data point using the supplied
         record.
@@ -302,14 +306,14 @@ class Table:
         
          # Add a new record to the records list or update an existing record
         current_dat_points = [record.data_point for record in self._records]
-
+        
         # Check the given records data point against the existing data point.
         if get_record.data_point in current_dat_points:
             datdex = current_dat_points.index(get_record.data_point)
             self._records[datdex].update_byrecord(get_record)
         else:
             self._records.append(get_record)
-
+    
     def write(self, col_width=20, dec_places=8, row_sort=True, tab_width=80):
         
         """ Write out the table to a list of strings. The column width can
@@ -330,7 +334,6 @@ class Table:
                 # Knock off any entries with no value
                 if col_pair[1] == None:
                     record.col_pairs.remove(col_pair)
-
         
         all_columns.sort()
         
@@ -341,7 +344,7 @@ class Table:
         # I think some sort of while loop here should be used to keep writing
         # the colums in useful chunks until we run out.
         while all_columns:
-        
+            
             onetab, all_columns = self._set_width_write( all_columns, 
                                                          tab_width,
                                                          string_format,
@@ -349,7 +352,6 @@ class Table:
             
             table_strings.extend(onetab)
             table_strings.append('\n')
-
          
         # Return the list of string
         return table_strings
@@ -365,30 +367,29 @@ class Table:
             
             # Make a string and add everything to it that is not the separator
             val_string = ''
-
+            
             while word_list[0] != '|':
-                    
+                
                 val_string += word_list.pop(0)
-
+                
                 # Add a space if the next entry is not the separator
                 if word_list[0] != '|':
                     val_string += ' '
-
+            
             # Add to the values list depending on what was read.
             # Don't like this None case. Very ambiguous!
             if val_string == '':
                 entries_list.append(None)
             else:
                 entries_list.append(val_string)
-
+            
             # Peel off the separator
             del(word_list[0])
-            
-        return entries_list
         
+        return entries_list
+    
     def _set_width_write( self, sorted_column_list, tab_width, string_format,
                           float_format, row_sort=True ):
-
         
         # Copy the column list and reverse it
         reverse_list = sorted_column_list[:]
@@ -401,37 +402,33 @@ class Table:
         # into a new list
         headings_string = string_format % self.row_type
         for column in sorted_column_list:
-        
+            
             col_string = string_format % column
             
             if len(headings_string + col_string) <= tab_width:
-            
                 headings_string += col_string
                 write_columns.append(reverse_list.pop())
-                
             else:
-            
                 break
-                
+        
         dashrule = ' ' + '-' * (len(headings_string) - 2)
         eqrule = ' ' + '=' * (len(headings_string) - 2)
-                
+        
         headings_string += '\n'
         dashrule += '\n'
         eqrule += '\n'
-
+    
         # Record the headings string
         table_strings.append(headings_string)
         table_strings.append(eqrule)
-
-
+        
         # Write out the records. First sort by the data_point value.
         if row_sort: 
             sorted_records = sorted(self._records, 
                                     key=lambda record: record.data_point)
         else:
             sorted_records = self._records
-                                           
+        
         for record in sorted_records:
             
             # Want to allow strings and numbers for the data point so convert
@@ -449,11 +446,10 @@ class Table:
             
             # Record the record string
             table_strings.append(record_string)
-            
+        
         table_strings.append(dashrule)
-            
         reverse_list.reverse()
-            
-        # Return the strings and the unused colummns
+        
+        # Return the strings and the unused columns
         return table_strings, reverse_list
 

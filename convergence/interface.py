@@ -24,13 +24,7 @@ Adapted from:
     Nov '11: Updated to reflect Celik et al 2008.
 """
 
-__author__ = "Mathew Topper"
 __copyright__ = "Copyright 2013, SuperGen Marine"
-__licence__ = "GPL"
-__version__ = "trunk"
-__maintainer__ = "Mathew Topper"
-__email__ = "mathew.topper@ed.ac.uk"
-__status__ = "Development"
 
 # Import built-in modules
 import argparse
@@ -217,7 +211,7 @@ class Convergence(object):
                     ratio = asymptotic_ratio(gci_fine_21, gci_fine_32,
                                              ratio_21, p)
             
-                except ArithmeticError, e:
+                except ArithmeticError as e:
                 
                     # log the error
                     self._log.warning(e)
@@ -235,7 +229,7 @@ class Convergence(object):
         """ Write info to the file."""
         try:
             file_handle = open(self.file_name, self.write_mode)
-        except IOError, e:
+        except IOError as e:
             self._log.warning(e)
         else:
             self._write_header(file_handle)
@@ -291,7 +285,7 @@ class Convergence(object):
                 p = order_of_convergence(trip[0][2], trip[1][2], trip[2][2],
                                      ratio_21, ratio_32)
 
-            except ArithmeticError, e:
+            except ArithmeticError as e:
                 
                 # log the error
                 self._log.warning(e)
@@ -327,7 +321,7 @@ class Convergence(object):
             # Get the gcis
             gci_f, gci_c = gci(ratio, e21a, p)
 
-        except ArithmeticError, e:
+        except ArithmeticError as e:
     
             # log the error
             self._log.warning(e)
@@ -498,7 +492,7 @@ class Convergence(object):
         
         # Write to the file
         rep_file.write('\n')
-        rep_file.write('Asympototic ratio test:\n')
+        rep_file.write('Asymptotic ratio test:\n')
         rep_file.write('\n')
         
         for line in tab_strings: rep_file.write(line)
@@ -548,17 +542,17 @@ def simple_read(file_name):
     
     return grid_list
 
-        
+
 def triplets(lst):
     i = iter(lst)
-    first = i.next()
-    second = i.next()
+    first = next(i)
+    second = next(i)
     for item in i:
         yield first, second, item
         first = second
         second = item
 
-    
+
 def main():
     
     # Prepare command line parser              
@@ -578,8 +572,7 @@ def main():
     parser.add_argument("file",
                         type=str,
                         help=("Input file path"))
-
-  
+    
     args = parser.parse_args()
     
     in_path = args.file
@@ -595,9 +588,3 @@ def main():
     # Write the report
     mainver.add_file(out_path, write_mode='w')
     mainver(coarse=True, ratios=True)
-
-
-if __name__ == "__main__":
-    
-    main()
-

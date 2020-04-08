@@ -24,8 +24,8 @@ projects. Watch this space.
 
 ## Installation
 
-The package requires no dependencies, but is currently only available for
-Python 2.7.
+The package requires no dependencies and is currently available for Pythons 
+2.7, 3.5, 3.6, 3.7 and 3.8.
 
 The package can be installed by downloading the source code, and using a
 terminal or command prompt as follows:

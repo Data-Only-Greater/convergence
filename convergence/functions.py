@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
  -- convergence package  -------------------------------------------------------
  
@@ -24,18 +22,12 @@ Adapted from:
     Nov '11: Updated to reflect Celik et al 2008.
 """
 
-__author__ = "Mathew Topper"
 __copyright__ = "Copyright 2013, SuperGen Marine"
-__licence__ = "GPL"
-__version__ = "trunk"
-__maintainer__ = "Mathew Topper"
-__email__ = "mathew.topper@ed.ac.uk"
-__status__ = "Development"
 
 # Import built-in modules
 from math import log
 
-        
+
 def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32, 
                           omega=0.5, tol=1.E-4): #, start_p=1.):
                               
@@ -51,11 +43,11 @@ def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32,
     
     # Set a maximum residual and number of iterations
     max_res = 1.E6
-
+    
     # calculate the epsilons.
     epsilon32 = float(value_3 - value_2)
     epsilon21 = float(value_2 - value_1)
-
+    
     # Calculate the fraction
     epfrac = epsilon32 / epsilon21
     
@@ -90,7 +82,7 @@ def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32,
         residual = p1 - p0
         
         iterations += 1
-        
+    
     return p1
 
 
@@ -112,7 +104,7 @@ def error_estimates(value_1, value_2, f_exact):
     relative error. The values of the grids and needed along 
     with the extrapolated value.
     """
-
+    
     # Get the approximate relative error
     e21a =  abs( (value_1 - value_2) / value_1 )
     
@@ -135,7 +127,7 @@ def gci(ratio_21, e21_approx, p):
     
     # Calculate the gci
     gci_fine = safety_factor * e21_approx / (ratio_21**p - 1.0)
-
+    
     gci_coarse = ratio_21**p * gci_fine
     
     return gci_fine, gci_coarse
