@@ -1,15 +1,19 @@
 
+import pathlib
 from setuptools import setup
 
-# def readme():
-    # with open('README.rst') as f:
-        # return f.read()
+# The directory containing this file
+HERE = pathlib.Path(__file__).parent
+
+# The text of the README file
+README = (HERE / "README.md").read_text()
 
 setup(name='convergence',
-      version='0.2.dev1',
+      version='0.1.1',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
-      # long_description=readme(),
+      long_description=README,
+      long_description_content_type='text/markdown',
       license = "GPLv3",
       author='Mathew Topper',
       author_email='dataonlygreater@gmail.com',
@@ -25,11 +29,12 @@ setup(name='convergence',
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
+        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Topic :: Scientific/Engineering"],
       )
-       
