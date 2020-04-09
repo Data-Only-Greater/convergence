@@ -1,0 +1,50 @@
+#   - Minimal appveyor.yml file is an empty file. All sections are optional.
+#   - Indent each level of configuration with 2 spaces. Do not use tabs!
+#   - All section names are case-sensitive.
+#   - Section names should be unique on each level.
+
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: 0.2.dev1.build{build}
+
+environment:
+  matrix:
+    - PYTHON_VERSION: 2.7
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+    - PYTHON_VERSION: 3.5
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+    - PYTHON_VERSION: 3.6
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+    - PYTHON_VERSION: 3.7
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+    - PYTHON_VERSION: 3.8
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
+install:
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update --quiet conda
+  - conda info --all
+  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest pytest-cov
+  - activate _convergence
+  - pip install -e .
+
+build: off
+
+test_script:
+  - py.test --cov convergence tests
+
+after_test:
+ - pip install codecov
+ - codecov
