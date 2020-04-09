@@ -36,15 +36,11 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update --quiet conda
   - conda info --all
-  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest pytest-cov
+  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest
   - activate _convergence
   - pip install -e .
 
 build: off
 
 test_script:
-  - py.test --cov convergence tests
-
-after_test:
- - pip install codecov
- - codecov
+  - py.test tests
