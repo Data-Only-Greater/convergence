@@ -1,4 +1,22 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright 2013 SuperGen UK Centre for Marine Energy Research
+# Copyright 2017-2020 Mathew Topper
+#
+# This file is part of convergence.
+#
+#    convergence is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    convergence is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with convergence.  If not, see <https://www.gnu.org/licenses/>.
 
 """
  -- convergence package  -------------------------------------------------------
@@ -23,8 +41,6 @@ Adapted from:
     
     Nov '11: Updated to reflect Celik et al 2008.
 """
-
-__copyright__ = "Copyright 2013, SuperGen Marine"
 
 # Import built-in modules
 import argparse
