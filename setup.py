@@ -1,18 +1,19 @@
 
-import pathlib
+import os
 from setuptools import setup
 
-# The directory containing this file
-HERE = pathlib.Path(__file__).parent
+HERE = os.path.abspath(os.path.join(__file__, ".."))
+README = os.path.join(HERE, "README.md")
 
-# The text of the README file
-README = (HERE / "README.md").read_text()
+def readme():
+    with open(README) as f:
+        return f.read()
 
 setup(name='convergence',
-      version='0.1.1',
+      version='0.1.2',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
-      long_description=README,
+      long_description=readme(),
       long_description_content_type='text/markdown',
       license = "GPLv3",
       author='Mathew Topper',
