@@ -43,6 +43,7 @@ Adapted from:
 """
 
 import argparse
+import warnings
 
 from .functions import (order_of_convergence,
                         richardson_extrapolate,
@@ -253,15 +254,12 @@ class Convergence(object):
                                              ratio_21, p)
                 
                 except ArithmeticError as e:
-                    
-                    # log the error
-                    self._log.warning(e)
+                    warnings.warn(e)
             
             else:
                 
-                # log the error
-                self._log.warning('get_ratios: failed none_check')
-                self._log.warning('Some required result not available')
+                warnings.warn('get_ratios: failed none_check')
+                warnings.warn('Some required result not available')
             
             # Add the result to the list as a dictionary
             self.grid_ratios.append({'assym_ratio' : ratio})
@@ -291,9 +289,7 @@ class Convergence(object):
                                      ratio_21, ratio_32)
             
             except ArithmeticError as e:
-                
-                # log the error
-                self._log.warning(e)
+                warnings.warn(e)
             
             # Make a dictionary
             shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
@@ -328,8 +324,7 @@ class Convergence(object):
         
         except ArithmeticError as e:
             
-            # log the error
-            self._log.warning(e)
+            warnings.warn(e)
         
         return f_exact, e21a, e21ext, gci_f, gci_c
     
@@ -560,11 +555,11 @@ def simple_read(file_name):
 
 def cl_interface():
     
-        # Prepare command line parser
+    # Prepare command line parser
     desStr = "Perform grid convergence study on input file."
     
     parser = argparse.ArgumentParser(description=desStr)
-            
+    
     parser.add_argument("-o", "--out",
                         type=str,
                         help=("output file path"),
