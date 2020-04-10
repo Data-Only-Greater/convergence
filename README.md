@@ -15,7 +15,7 @@ Study.
 [![](https://img.shields.io/travis/Data-Only-Greater/convergence)](https://travis-ci.com/github/Data-Only-Greater/convergence)
 
 ![](https://img.shields.io/badge/platform-windows-lightgrey.svg)
-[![](https://img.shields.io/appveyor/build/Data-Only-Greater/convergence)](https://ci.appveyor.com/project/DataOnlyGreater/convergence)
+[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence)](https://ci.appveyor.com/project/DataOnlyGreater/convergence)
 
 [![](https://img.shields.io/codecov/c/github/Data-Only-Greater/convergence)](https://codecov.io/gh/Data-Only-Greater/convergence)
 
