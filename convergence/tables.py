@@ -369,7 +369,7 @@ class Table(object):
                                                          float_format)
             
             table_strings.extend(onetab)
-            table_strings.append('\n')
+            table_strings.append('')
          
         # Return the list of string
         return table_strings
@@ -429,13 +429,9 @@ class Table(object):
             else:
                 break
         
-        dashrule = ' ' + '-' * (len(headings_string) - 2)
-        eqrule = ' ' + '=' * (len(headings_string) - 2)
+        dashrule = ' ' + '-' * (len(headings_string) - 2) + ' '
+        eqrule = ' ' + '=' * (len(headings_string) - 2) + ' '
         
-        headings_string += '\n'
-        dashrule += '\n'
-        eqrule += '\n'
-    
         # Record the headings string
         table_strings.append(headings_string)
         table_strings.append(eqrule)
@@ -460,7 +456,6 @@ class Table(object):
                     record_string += float_format % record.col_pairs[coldex][1]
                 else:
                     record_string += string_format % ''
-            record_string += '\n'
             
             # Record the record string
             table_strings.append(record_string)

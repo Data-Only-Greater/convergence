@@ -44,3 +44,4 @@ build: off
 
 test_script:
   - py.test tests
+  - python -m doctest -v README.md

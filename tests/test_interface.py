@@ -19,10 +19,25 @@
 
 import os
 
-from convergence import Convergence, simple_read
+from convergence.interface import main, simple_read, Convergence
 
 this_dir_path = os.path.dirname(__file__)
 data_dir_path = os.path.join(this_dir_path, "..", "data")
+
+
+def test_interface(tmpdir):
+    
+    in_path = os.path.join(data_dir_path, "prD.do")
+    out_path = str(tmpdir.join("test_main.txt"))
+    
+    assert not os.path.isfile(out_path)
+    
+    import subprocess
+    subprocess.call(["grid-convergence",
+                     "-o", out_path,
+                     in_path])
+    
+    assert os.path.isfile(out_path)
 
 
 def test_main(tmpdir):
@@ -32,14 +47,63 @@ def test_main(tmpdir):
     
     assert not os.path.isfile(out_path)
     
-    # Read in the file
-    main_list = simple_read(in_path)
-    
-    # Run convergence study
-    mainver = Convergence(main_list)
-        
-    # Write the report
-    mainver.add_file(out_path, write_mode='w')
-    mainver(coarse=True, ratios=True)
+    main(in_path, out_path)
     
     assert os.path.isfile(out_path)
+
+
+def test_Convergence_str():
+    
+    in_path = os.path.join(data_dir_path, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence()
+    convergence.add_grids(main_list)
+    
+    expected_lines = (
+'',
+'Number of grids to be examined = 3 ',
+'',
+'     Grid Size     Quantity ',
+'',
+'     1.000000      0.970500 ',
+'     2.000000      0.968540 ',
+'     4.000000      0.961780 ',
+'',
+'',
+'Discretisation errors for fine grids: ',
+'',
+'       Grids |     e_approx |     e_extrap |      f_exact |   gci_coarse | ',
+' ========================================================================= ',
+'       1 2 3 |     0.002020 |     0.000824 |     0.971300 |     0.003555 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |     gci_fine |            p |          r21 |          r32 | ',
+' ========================================================================= ',
+'       1 2 3 |     0.001031 |     1.786170 |     2.000000 |     2.000000 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'',
+'Discretisation errors for coarse grids: ',
+'',
+'       Grids |     e_approx |     e_extrap |      f_exact |   gci_coarse | ',
+' ========================================================================= ',
+'       1 2 3 |     0.006980 |     0.002842 |     0.971300 |     0.012287 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |     gci_fine |            p |          r21 |          r32 | ',
+' ========================================================================= ',
+'       1 2 3 |     0.003562 |     1.786170 |     2.000000 |     2.000000 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'',
+'Asymptotic ratio test: ',
+'',
+'           Grids | Asymptotic ratio | ',
+' ==================================== ',
+'           1 2 3 |         0.997980 | ',
+' ------------------------------------ ',
+'')
+    
+    expected = "\n".join(expected_lines)
+    
+    assert str(convergence) == expected

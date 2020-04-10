@@ -10,7 +10,7 @@ def readme():
         return f.read()
 
 setup(name='convergence',
-      version='0.1.2',
+      version='0.2.dev2',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
       long_description=readme(),
@@ -18,13 +18,13 @@ setup(name='convergence',
       license = "GPLv3",
       author='Mathew Topper',
       author_email='dataonlygreater@gmail.com',
-      url='https://github.com/H0R5E/convergence',
+      url='https://github.com/Data-Only-Greater/convergence',
       packages=['convergence'],
       python_requires='>=2.7, !=3.9.*, <4',
       extras_require={
         'test': ["pytest", "pytest-cov"]},
       entry_points = {'console_scripts': 
-                           ['grid-convergence = convergence:main']},
+                  ['grid-convergence = convergence.interface:cl_interface']},
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",

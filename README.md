@@ -43,30 +43,32 @@ projects. Watch this space.
 The package requires no dependencies and is currently available for Pythons 
 2.7, 3.5, 3.6, 3.7 and 3.8.
 
-The package can be installed by downloading the source code, and using a
-terminal or command prompt as follows:
+The latest stable version of the package can be downloaded from PyPI using 
+[pip](https://packaging.python.org/tutorials/installing-packages/):
+
+```
+pip install convergence
+```
+
+The development version of the package can be installed by cloning or 
+downloading the source code, and using the command prompt as follows: 
 
 ```
 cd /path/to/convergence
 python setup.py install
 ```
 
-The package can also be downloaded from PyPI, again using a
-terminal or command prompt:
-
-```
-pip install convergence
-```
+Note that the stable version may not contain all of the features found in the
+development version but it should be more reliable.
 
 ## Basic Usage
 
-The package provides a command line interface which is the main (and currently 
-only sensible) way to use the package. The input data must be a space delimeted 
-text file with the first column being the grid spacing and the second column 
-being the metric of interest. An example can be found in the _data_ folder of 
-the source code.
+### Command Line
 
-The program can then be executed as follows: 
+The package provides a command line interface. The input data must be a space 
+delimited text file with the first column being the grid spacing and the second 
+column being the metric of interest. An example can be found in the _data_ 
+folder of the source code. The program can then be executed as follows: 
 
 ```
 grid-convergence /path/to/data/file
@@ -74,10 +76,32 @@ grid-convergence /path/to/data/file
 
 By default, the results of the program are written to a file called 
 _verify_report.txt_ in the calling directory. The file name can be changed
-using the _-o_ or _--out_ command line options. The format of the file
-is as follows:
+using the _-o_ or _--out_ command line options.
 
-    --- VERIFY: Performs verification calculations --- 
+### Scripting
+
+The package can also be used from within a script. Grids are provided in a 
+list of pairs, i.e `[(size1, value1), (size2, value2), ...]`. Example usage
+is:
+
+```python
+>>> from __future__ import print_function
+>>> from convergence import Convergence
+>>> grids = [(1.000000, 0.970500),
+...          (2.000000, 0.968540),
+...          (4.000000, 0.961780)]
+>>> convergence = Convergence()
+>>> convergence.add_grids(grids)
+>>> print(convergence) # doctest:+ELLIPSIS
+<BLANKLINE>
+Number of grids to be examined = 3 ...
+
+```
+
+### Expected Output
+
+The output file, when using the command line interface, or the stdout ouput 
+when using the `Convergence` class, will resemble the following: 
 
     Number of grids to be examined = 3 
 
@@ -120,9 +144,6 @@ is as follows:
      ====================================
                1 2 3 |         0.997980 | 
      ------------------------------------
-
-
-    --- End of VERIFY --- 
 
 In the first table the input data is displayed. The second table shows the
 fine analysis results for each trio of grids and the second table shows the
