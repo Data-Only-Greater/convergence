@@ -233,6 +233,10 @@ errors:
 
 ## License
 
+Copyright 2011 SuperGen Marine Energy Research Consortium
+Copyright 2013 SuperGen UK Centre for Marine Energy Research
+Copyright 2017-2020 Mathew Topper
+
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
 Foundation, either version 3 of the License, or (at your option) any later 

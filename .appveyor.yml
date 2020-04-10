@@ -7,8 +7,9 @@
 #      general configuration      #
 #---------------------------------#
 
-# version format
-version: 0.2.dev1.build{build}
+clone_depth: 50
+max_jobs: 100
+version: build{build}
 
 environment:
   matrix:

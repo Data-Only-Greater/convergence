@@ -10,7 +10,7 @@ def readme():
         return f.read()
 
 setup(name='convergence',
-      version='0.2.dev2',
+      version='0.2.0',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
       long_description=readme(),
