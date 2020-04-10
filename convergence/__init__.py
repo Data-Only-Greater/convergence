@@ -18,5 +18,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with convergence.  If not, see <https://www.gnu.org/licenses/>.
 
-from .functions import *
-from .interface import Convergence, simple_read, main
+__all__ = ["Convergence", "simple_read"]
+
+from .interface import Convergence, simple_read

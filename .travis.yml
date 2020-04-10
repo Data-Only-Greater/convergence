@@ -19,6 +19,7 @@ install:
 
 script:
   - pip install -e .
+  - python -m doctest -v README.md
   - py.test --cov=convergence tests
 
 env:
