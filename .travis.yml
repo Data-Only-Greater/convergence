@@ -22,7 +22,7 @@ script:
   - py.test --cov=convergence tests
 
 env:
-  - CODECOV_TOKEN="87c24ef5-b1eb-4833-87b4-34706d9e1e8d"
+  - CODECOV_TOKEN="0a761bdf-6546-411f-88c8-dac96fc73df0"
 
 after_success:
   - codecov
