@@ -249,10 +249,9 @@ class Convergence(object):
                 gci_fine_32 = coarse['gci_f']
                 
                 try:
-                    
-                    ratio = asymptotic_ratio(gci_fine_21, gci_fine_32,
+                    ratio = asymptotic_ratio(gci_fine_21,
+                                             gci_fine_32,
                                              ratio_21, p)
-                
                 except ArithmeticError as e:
                     warnings.warn(e)
             
@@ -284,10 +283,11 @@ class Convergence(object):
             
             # Get order of convergence if possible
             try:
-                
-                p = order_of_convergence(trip[0][2], trip[1][2], trip[2][2],
-                                     ratio_21, ratio_32)
-            
+                p = order_of_convergence(trip[0][2],
+                                         trip[1][2],
+                                         trip[2][2],
+                                         ratio_21,
+                                         ratio_32)
             except ArithmeticError as e:
                 warnings.warn(e)
             
@@ -309,21 +309,29 @@ class Convergence(object):
         # Default the values to None
         f_exact = e21a = e21ext = gci_f = gci_c = None
         
+        # Perform Richardson extrapolation to estimate a zero grid value.
         try:
-            
-            # Perform Richardson extrapolation to estimate a zero grid value.
-            f_exact = richardson_extrapolate(grid_one[2], grid_two[2],
-                                                ratio, p)
-                                        
-            # Get the approximate and extrapolated relative errors
-            e21a, e21ext = error_estimates(grid_one[2], grid_two[2],
-                                            f_exact)
-            
-            # Get the gcis
-            gci_f, gci_c = gci(ratio, e21a, p)
-        
+            f_exact = richardson_extrapolate(grid_one[2],
+                                             grid_two[2],
+                                             ratio,
+                                             p)
         except ArithmeticError as e:
-            
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the approximate and extrapolated relative errors
+        try:
+            e21a, e21ext = error_estimates(grid_one[2],
+                                           grid_two[2],
+                                           f_exact)
+        except ArithmeticError as e:
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the gcis
+        try:
+            gci_f, gci_c = gci(ratio, e21a, p)
+        except ArithmeticError as e:
             warnings.warn(e)
         
         return f_exact, e21a, e21ext, gci_f, gci_c
