@@ -98,6 +98,12 @@ Number of grids to be examined = 3 ...
 
 ```
 
+```python
+>>> convergence[0].fine.f_exact
+0.9713003333333334
+
+```
+
 ### Expected Output
 
 The output file, when using the command line interface, or the stdout ouput 

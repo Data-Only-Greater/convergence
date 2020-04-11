@@ -77,11 +77,6 @@ class Convergence(object):
         
         return
     
-    @property
-    def finest(self):
-        nspace = self._grid_nspaces[0]
-        return nspace
-    
     def add_grids(self, grids):
         
         self._set_grids(grids)
@@ -546,6 +541,30 @@ class Convergence(object):
         for line in tab_strings: msgs.append(line)
         
         return msgs
+    
+    def __len__(self):
+        
+        if self._grid_nspaces is None:
+            result = 0
+        else:
+            result = len(self._grid_nspaces)
+        
+        return result
+    
+    def __getitem__(self, key):
+        
+        if self._grid_nspaces is None:
+            raise IndexError(key)
+        
+        if not isinstance(key, int):
+            raise TypeError(type(key))
+        
+        try:
+            nspace = self._grid_nspaces[key]
+        except KeyError:
+            raise IndexError(key)
+        
+        return nspace
     
     def __str__(self):
         
