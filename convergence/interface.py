@@ -119,6 +119,41 @@ class Convergence(object):
         
         return
     
+    def _get_shared(self):
+        
+        """ Record the refinement rations and the order of convergence for each
+        of the triplets in grid_trips.
+        """
+        
+        # Initialise the shared data list
+        self._grid_shared = []
+        
+        for trip in self._grid_triplets:
+            
+            # Calculate the refinement ratios
+            ratio_21 = float(trip[1][1] / trip[0][1])
+            ratio_32 = float(trip[2][1] / trip[1][1])
+            
+            # Default p to None
+            p = None
+            
+            # Get order of convergence if possible
+            try:
+                p = order_of_convergence(trip[0][2],
+                                         trip[1][2],
+                                         trip[2][2],
+                                         ratio_21,
+                                         ratio_32)
+            except ArithmeticError as e:
+                warnings.warn(e)
+            
+            # Make a dictionary
+            shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
+                           'p' : p}
+            
+            # Add the results to the list
+            self._grid_shared.append(shared_dict)
+    
     def _get_fine_values(self):
         
         """ Get the fine values (for grids 1 and 2 of the triplet) of the 
@@ -264,41 +299,6 @@ class Convergence(object):
             
             # Add the result to the list as a dictionary
             self._grid_ratios.append({'assym_ratio' : ratio})
-    
-    def _get_shared(self):
-        
-        """ Record the refinement rations and the order of convergence for each
-        of the triplets in grid_trips.
-        """
-        
-        # Initialise the shared data list
-        self._grid_shared = []
-        
-        for trip in self._grid_triplets:
-            
-            # Calculate the refinement ratios
-            ratio_21 = float(trip[1][1] / trip[0][1])
-            ratio_32 = float(trip[2][1] / trip[1][1])
-            
-            # Default p to None
-            p = None
-            
-            # Get order of convergence if possible
-            try:
-                p = order_of_convergence(trip[0][2],
-                                         trip[1][2],
-                                         trip[2][2],
-                                         ratio_21,
-                                         ratio_32)
-            except ArithmeticError as e:
-                warnings.warn(e)
-            
-            # Make a dictionary
-            shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
-                           'p' : p}
-            
-            # Add the results to the list
-            self._grid_shared.append(shared_dict)
     
     def _get_values(self, grid_one, grid_two, ratio, p):
         
