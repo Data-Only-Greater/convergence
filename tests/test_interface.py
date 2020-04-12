@@ -36,6 +36,15 @@ def convergence():
     return convergence
 
 
+@pytest.fixture(scope="module")
+def convergence_anal():
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence.add_grids(main_list)
+    return convergence
+
+
 def test_interface(tmpdir):
     
     in_path = os.path.join(DATA_DIR_PATH, "prD.do")
@@ -63,7 +72,7 @@ def test_main(tmpdir):
     assert os.path.isfile(out_path)
 
 
-def test_Convergence_str(convergence):
+def test_convergence_str(convergence):
     
     expected_lines = (
 '',
@@ -110,9 +119,71 @@ def test_Convergence_str(convergence):
 ' ------------------------------------ ',
 '')
     
-    expected = "\n".join(expected_lines)
+    for actual, expected in zip(str(convergence).split("\n"),
+                                expected_lines):
+        assert actual == expected
+
+
+def test_convergence_anal_str(convergence_anal):
     
-    assert str(convergence) == expected
+    expected_lines = (
+'',
+'Number of grids to be examined = 3 ',
+'',
+'     Grid Size     Quantity ',
+'',
+'     1.000000      0.970500 ',
+'     2.000000      0.968540 ',
+'     4.000000      0.961780 ',
+'',
+'',
+'Discretisation errors for fine grids: ',
+'',
+'       Grids |   e_analytic |     e_approx |     e_extrap |   f_analytic | ',
+' ========================================================================= ',
+'       1 2 3 |     0.000824 |     0.002020 |     0.000824 |     0.971300 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |      f_delta |      f_exact |   gci_coarse |     gci_fine | ',
+' ========================================================================= ',
+'       1 2 3 |    -0.000000 |     0.971300 |     0.003555 |     0.001031 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |            p |          r21 |          r32 | ',
+' ========================================================== ',
+'       1 2 3 |     1.786170 |     2.000000 |     2.000000 | ',
+' ---------------------------------------------------------- ',
+'',
+'',
+'Discretisation errors for coarse grids: ',
+'',
+'       Grids |   e_analytic |     e_approx |     e_extrap |   f_analytic | ',
+' ========================================================================= ',
+'       1 2 3 |     0.002842 |     0.006980 |     0.002842 |     0.971300 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |      f_delta |      f_exact |   gci_coarse |     gci_fine | ',
+' ========================================================================= ',
+'       1 2 3 |    -0.000000 |     0.971300 |     0.012287 |     0.003562 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |            p |          r21 |          r32 | ',
+' ========================================================== ',
+'       1 2 3 |     1.786170 |     2.000000 |     2.000000 | ',
+' ---------------------------------------------------------- ',
+'',
+'',
+'Asymptotic ratio test: ',
+'',
+'           Grids | Asymptotic ratio | ',
+' ==================================== ',
+'           1 2 3 |         0.997980 | ',
+' ------------------------------------ ',
+'')
+    
+    for actual, expected in zip(str(convergence_anal).split("\n"),
+                                expected_lines):
+        assert actual == expected
 
 
 @pytest.mark.parametrize("test_input,expected",
@@ -139,6 +210,26 @@ def test_Convergence_str(convergence):
 def test_nspace(convergence, test_input, expected):
     
     nspace = convergence[0]
+    first_level =  vars(nspace)[test_input[0]]
+    
+    if test_input[1] is None:
+        test_value = first_level
+    else:
+        test_value = vars(first_level)[test_input[1]]
+    
+    assert test_value == expected
+
+
+@pytest.mark.parametrize("test_input,expected",
+                         [(('fine', 'e_analytic'), 0.000823638422732444),
+                          (('fine', 'f_analytic'), 0.9713),
+                          (('fine', 'f_delta'), -3.33333333379926e-07),
+                          (('coarse', 'e_analytic'), 0.002841552558426949),
+                          (('coarse', 'f_analytic'), 0.9713),
+                          (('coarse', 'f_delta'), -3.33333333379926e-07)])
+def test_nspace_anal(convergence_anal, test_input, expected):
+    
+    nspace = convergence_anal[0]
     first_level =  vars(nspace)[test_input[0]]
     
     if test_input[1] is None:

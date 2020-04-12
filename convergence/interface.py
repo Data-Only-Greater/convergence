@@ -355,30 +355,46 @@ class Convergence(object):
             if self._grid_fine[tripdex] is not None:
                 total_dict.update(self._grid_fine[tripdex])
             
-            fspace = argparse.Namespace(**{"e_approx": total_dict['e_a'],
-                                           "e_extrap": total_dict['e_ext'],
-                                           "f_exact": total_dict['f_exact'],
-                                           "gci_coarse": total_dict['gci_c'],
-                                           "gci_fine": total_dict['gci_f'],
-                                           "p": total_dict['p'],
-                                           "r21": total_dict['ratio_21'],
-                                           "r32": total_dict['ratio_32']})
+            nsdict = {"e_approx": total_dict['e_a'],
+                      "e_extrap": total_dict['e_ext'],
+                      "f_exact": total_dict['f_exact'],
+                      "gci_coarse": total_dict['gci_c'],
+                      "gci_fine": total_dict['gci_f'],
+                      "p": total_dict['p'],
+                      "r21": total_dict['ratio_21'],
+                      "r32": total_dict['ratio_32']}
+            
+            if self._f_anal is not None:
+                
+                nsdict['e_analytic'] = total_dict['e_anal']
+                nsdict['f_analytic'] = total_dict['f_anal']
+                nsdict['f_delta'] = total_dict['f_delta']
+            
+            fspace = argparse.Namespace(**nsdict)
             
             # Add the shared and coarse dictionaries
             total_dict = dict(self._grid_shared[tripdex])
             if self._grid_fine[tripdex] is not None:
                 total_dict.update(self._grid_coarse[tripdex])
             
-            assym_ratio = self._grid_ratios[tripdex]['assym_ratio']
+            nsdict = {"e_approx": total_dict['e_a'],
+                      "e_extrap": total_dict['e_ext'],
+                      "f_exact": total_dict['f_exact'],
+                      "gci_coarse": total_dict['gci_c'],
+                      "gci_fine": total_dict['gci_f'],
+                      "p": total_dict['p'],
+                      "r21": total_dict['ratio_21'],
+                      "r32": total_dict['ratio_32']}
             
-            cspace = argparse.Namespace(**{"e_approx": total_dict['e_a'],
-                                           "e_extrap": total_dict['e_ext'],
-                                           "f_exact": total_dict['f_exact'],
-                                           "gci_coarse": total_dict['gci_c'],
-                                           "gci_fine": total_dict['gci_f'],
-                                           "p": total_dict['p'],
-                                           "r21": total_dict['ratio_21'],
-                                           "r32": total_dict['ratio_32']})
+            if self._f_anal is not None:
+                
+                nsdict['e_analytic'] = total_dict['e_anal']
+                nsdict['f_analytic'] = total_dict['f_anal']
+                nsdict['f_delta'] = total_dict['f_delta']
+            
+            cspace = argparse.Namespace(**nsdict)
+            
+            assym_ratio = self._grid_ratios[tripdex]['assym_ratio']
             
             nspace = argparse.Namespace(**{"grids": grids_string,
                                            "sizes": grids_sizes,
