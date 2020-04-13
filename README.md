@@ -12,10 +12,10 @@ Study.
 [![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/download/releases/3.8.0/) 
 
 ![](https://img.shields.io/badge/platform-linux-lightgrey.svg)
-[![](https://img.shields.io/travis/Data-Only-Greater/convergence)](https://travis-ci.com/github/Data-Only-Greater/convergence)
+[![](https://img.shields.io/travis/com/Data-Only-Greater/convergence/master)](https://travis-ci.com/github/Data-Only-Greater/convergence)
 
 ![](https://img.shields.io/badge/platform-windows-lightgrey.svg)
-[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence)](https://ci.appveyor.com/project/DataOnlyGreater/convergence)
+[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence/master)](https://ci.appveyor.com/project/DataOnlyGreater/convergence/branch/master)
 
 [![](https://img.shields.io/codecov/c/github/Data-Only-Greater/convergence)](https://codecov.io/gh/Data-Only-Greater/convergence)
 
