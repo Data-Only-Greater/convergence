@@ -15,18 +15,23 @@ environment:
     - PYTHON_VERSION: 2.7
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
+      PYTEST_DEPS: "mock pytest-mock"
     - PYTHON_VERSION: 3.5
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
+      PYTEST_DEPS: "pytest-mock"
     - PYTHON_VERSION: 3.6
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
+      PYTEST_DEPS: "pytest-mock"
     - PYTHON_VERSION: 3.7
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
+      PYTEST_DEPS: "pytest-mock"
     - PYTHON_VERSION: 3.8
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
+      PYTEST_DEPS: "pytest-mock"
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
@@ -36,7 +41,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update --quiet conda
   - conda info --all
-  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest pytest-mock
+  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest %PYTEST_DEPS%
   - activate _convergence
   - pip install -e .
 
