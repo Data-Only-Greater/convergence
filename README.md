@@ -12,10 +12,10 @@ Study.
 [![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/download/releases/3.8.0/) 
 
 ![](https://img.shields.io/badge/platform-linux-lightgrey.svg)
-[![](https://img.shields.io/travis/Data-Only-Greater/convergence)](https://travis-ci.com/github/Data-Only-Greater/convergence)
+[![](https://img.shields.io/travis/com/Data-Only-Greater/convergence/master)](https://travis-ci.com/github/Data-Only-Greater/convergence)
 
 ![](https://img.shields.io/badge/platform-windows-lightgrey.svg)
-[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence)](https://ci.appveyor.com/project/DataOnlyGreater/convergence)
+[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence/master)](https://ci.appveyor.com/project/DataOnlyGreater/convergence/branch/master)
 
 [![](https://img.shields.io/codecov/c/github/Data-Only-Greater/convergence)](https://codecov.io/gh/Data-Only-Greater/convergence)
 
@@ -63,6 +63,9 @@ development version but it should be more reliable.
 
 ## Basic Usage
 
+The most straightforward method of using convergence is to generate a report
+which details the grid convergence metrics for a given set of grids.
+
 ### Command Line
 
 The package provides a command line interface. The input data must be a space 
@@ -100,8 +103,8 @@ Number of grids to be examined = 3 ...
 
 ### Expected Output
 
-The output file, when using the command line interface, or the stdout ouput 
-when using the `Convergence` class, will resemble the following: 
+The result, contained in the output file when using the command line interface 
+or when printing a `Convergence` object, will resemble the following: 
 
     Number of grids to be examined = 3 
 
@@ -138,7 +141,7 @@ when using the `Convergence` class, will resemble the following:
      -------------------------------------------------------------------------
 
 
-    Asympototic ratio test:
+    Asymptotic ratio test:
 
                Grids | Asymptotic ratio | 
      ====================================
@@ -155,14 +158,16 @@ The headers of the tables have the following meanings:
 + **Grids**: the trio of grids being analysed
 + **e_approx**: approximate relative error
 + **e_extrap**: extrapolated relative error
-+ **f_exact**: the estimated the zero grid spacing value
++ **f_exact**: the estimated value at zero grid spacing 
 + **gci_coarse**: coarse grid convergence index
 + **gci_fine** fine grid convergence index
 + **p**: order of convergence
 + **r21**: ratio of the middle to fine grid spacing
 + **r32**: ratio of the coarse to middle grid spacing
 
-## Known Analytical Result
+## Advanced Usage
+
+### Known Analytical Result
 
 If there is a known zero spacing value for the convergence study this value
 can be added to the analysis using the _-a_ or _--analytical_ command line
@@ -172,13 +177,59 @@ option. To illustrate, the basic example would now become:
 grid-convergence /path/to/data/file -a 0.12345
 ```
 
+Alternatively, when using the `Convergence` class, add the analytical value
+when instantiating the object, using the `f_anal` argument:
+
+```python
+>>> convergence = Convergence(f_anal=0.9713)
+>>> convergence.add_grids(grids)
+>>> print(convergence) # doctest:+SKIP
+```
+
 Additional headers now appear in the fine and coarse analysis tables with the
 following meanings:
 
 + **e_analytic**: analytical relative error
-+ **f_analytic**: the analytical the zero grid spacing value
++ **f_analytic**: the analytical value at zero grid spacing
 + **f_delta**: the different between the analytical and estimated zero grid
-               spacing value
+               spacing values
+
+### Report Attribute Access
+
+Values for the report attributes can be accessed through the `Convergence`
+class. A namespace containing the values for each triplet of grids is stored in 
+the items of a `Convergence` object, ordered from finest to coarsest. For 
+example:
+
+```python
+>>> len(convergence)
+1
+>>> convergence[0] # doctest:+ELLIPSIS
+Namespace(asymptotic_ratio=0.997980422462648, ...
+
+```
+
+Values associated the both the fine and coarse grids are available at the
+first level of the namespace. For example, to get the asymptotic ratio of the
+finest triplet of grids:
+
+```python
+>>> convergence[0].asymptotic_ratio
+0.997980422462648
+
+```
+
+Values associated to either the fine of coarse analysis, are stored under the
+`fine` and `coarse` keys. For example, to examine the extrapolated relative 
+errors:
+
+```python
+>>> convergence[0].fine.e_extrap
+0.0008239813226325151
+>>> convergence[0].coarse.e_extrap
+0.002841894765814084
+
+```
 
 ## License
 

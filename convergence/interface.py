@@ -43,6 +43,7 @@ Adapted from:
 """
 
 import argparse
+import warnings
 
 from .functions import (order_of_convergence,
                         richardson_extrapolate,
@@ -64,14 +65,15 @@ class Convergence(object):
     def __init__(self, met_name=None, f_anal=None, zero_tol=1E-4):
     
         self.met_name = met_name
-        self.f_anal = f_anal
-        self.grids = []
-        self.grid_shared = None
-        self.grid_fine = None
-        self.grid_coarse = None
-        self.grid_ratios = None
-        self._grid_triplets = None
+        self._f_anal = f_anal
         self._zero_tol = zero_tol
+        self._grids = []
+        self._grid_shared = None
+        self._grid_fine = None
+        self._grid_coarse = None
+        self._grid_ratios = None
+        self._grid_triplets = None
+        self._grid_nspaces = None
         
         return
     
@@ -83,15 +85,16 @@ class Convergence(object):
         self._get_fine_values()
         self._get_coarse_values()
         self._get_ratios()
+        self._make_attributes()
         
         return
     
     def _set_grids(self, grids):
         
-        pre_sort = list(self.grids)
+        pre_sort = list(self._grids)
         pre_sort.extend(grids)
         sorted_grids = sorted(pre_sort, key=lambda grid: grid[0])
-        self.grids = tuple(sorted_grids)
+        self._grids = tuple(sorted_grids)
         
         return
     
@@ -101,7 +104,7 @@ class Convergence(object):
         
         grid_num = 1
         
-        for grid, value in self.grids:
+        for grid, value in self._grids:
             
             if abs(value) > self._zero_tol:
                 numbered_grids.append([grid_num, grid, value])
@@ -116,6 +119,41 @@ class Convergence(object):
         
         return
     
+    def _get_shared(self):
+        
+        """ Record the refinement rations and the order of convergence for each
+        of the triplets in grid_trips.
+        """
+        
+        # Initialise the shared data list
+        self._grid_shared = []
+        
+        for trip in self._grid_triplets:
+            
+            # Calculate the refinement ratios
+            ratio_21 = float(trip[1][1] / trip[0][1])
+            ratio_32 = float(trip[2][1] / trip[1][1])
+            
+            # Default p to None
+            p = None
+            
+            # Get order of convergence if possible
+            try:
+                p = order_of_convergence(trip[0][2],
+                                         trip[1][2],
+                                         trip[2][2],
+                                         ratio_21,
+                                         ratio_32)
+            except (ArithmeticError, RuntimeError) as e:
+                warnings.warn(e)
+            
+            # Make a dictionary
+            shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
+                           'p' : p}
+            
+            # Add the results to the list
+            self._grid_shared.append(shared_dict)
+    
     def _get_fine_values(self):
         
         """ Get the fine values (for grids 1 and 2 of the triplet) of the 
@@ -124,18 +162,18 @@ class Convergence(object):
         """
         
         # Initialise the fine grid results list
-        self.grid_fine = []
+        self._grid_fine = []
         
         for trip in self._grid_triplets:
             
             tripdex = self._grid_triplets.index(trip)
             
-            ratio_21 = self.grid_shared[tripdex]['ratio_21']
-            p = self.grid_shared[tripdex]['p']
+            ratio_21 = self._grid_shared[tripdex]['ratio_21']
+            p = self._grid_shared[tripdex]['p']
             
             # if p is None then nothing can be done
             if p is None:
-                self.grid_fine.append(None)
+                self._grid_fine.append(None)
                 continue
             
             # Get the values for the fine grids
@@ -149,22 +187,29 @@ class Convergence(object):
                          'gci_f' : gci_f, 'gci_c' : gci_c}
                          
             # If there is an anlytical value than do more work
-            if self.f_anal is not None:
+            if self._f_anal is not None:
                 
-                f_delta = float(self.f_anal) - f_exact
-                e21dummy, e21_anal = error_estimates(trip[0][2],
-                                                     trip[1][2],
-                                                     float(self.f_anal))
+                f_delta = e21_anal = None
+                
+                if f_exact is not None:
+                    f_delta = float(self._f_anal) - f_exact
+                
+                try:
+                    _, e21_anal = error_estimates(trip[0][2],
+                                                  trip[1][2],
+                                                  float(self._f_anal))
+                except ArithmeticError as e:
+                    warnings.warn(e)
                 
                 # Add these to the dictionary
-                anal_dict = {'f_anal': float(self.f_anal), 
+                anal_dict = {'f_anal': float(self._f_anal), 
                              'f_delta' : f_delta, 
                              'e_anal' : e21_anal}
                 
                 fine_dict.update(anal_dict)
             
             # Write the results to the list.
-            self.grid_fine.append(fine_dict)
+            self._grid_fine.append(fine_dict)
     
     def _get_coarse_values(self):
         
@@ -174,18 +219,18 @@ class Convergence(object):
         """
         
         # Initialise the coarse grid results list
-        self.grid_coarse = []
+        self._grid_coarse = []
         
         for trip in self._grid_triplets:
             
             tripdex = self._grid_triplets.index(trip)
             
-            ratio_32 = self.grid_shared[tripdex]['ratio_32']
-            p = self.grid_shared[tripdex]['p']
+            ratio_32 = self._grid_shared[tripdex]['ratio_32']
+            p = self._grid_shared[tripdex]['p']
             
             # if p is None then nothing can be done
             if p is None:
-                self.grid_coarse.append(None)
+                self._grid_coarse.append(None)
                 continue
             
             # Get the values for the coarse grids
@@ -199,22 +244,67 @@ class Convergence(object):
                            'e_ext' : e32ext, 'gci_f' : gci_f, 'gci_c' : gci_c}
                            
             # If there is an anlytical value than do more work
-            if self.f_anal is not None:
+            if self._f_anal is not None:
                 
-                f_delta = float(self.f_anal) - f_exact
-                e21dummy, e23_anal = error_estimates(trip[1][2],
-                                                     trip[2][2],
-                                                     float(self.f_anal))
+                f_delta = e23_anal = None
+                
+                if f_exact is not None:
+                    f_delta = float(self._f_anal) - f_exact
+                
+                try:
+                    _, e23_anal = error_estimates(trip[1][2],
+                                                  trip[2][2],
+                                                  float(self._f_anal))
+                except ArithmeticError as e:
+                    warnings.warn(e)
                 
                 # Add these to the dictionary
-                anal_dict = {'f_anal': float(self.f_anal), 
+                anal_dict = {'f_anal': float(self._f_anal), 
                              'f_delta' : f_delta, 
                              'e_anal' : e23_anal}
                 
                 coarse_dict.update(anal_dict)
             
             # Write the results to the list.
-            self.grid_coarse.append(coarse_dict)
+            self._grid_coarse.append(coarse_dict)
+    
+    def _get_values(self, grid_one, grid_two, ratio, p):
+        
+        """ Get the values (for the given grids) of the 
+        extrapolated value, relative and extrapolated relative error and GCI 
+        fine and coarse. The refinment ratio and order of convergence, p, is
+        required.
+        """
+        
+        # Default the values to None
+        f_exact = e21a = e21ext = gci_f = gci_c = None
+        
+        # Perform Richardson extrapolation to estimate a zero grid value.
+        try:
+            f_exact = richardson_extrapolate(grid_one[2],
+                                             grid_two[2],
+                                             ratio,
+                                             p)
+        except ArithmeticError as e:
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the approximate and extrapolated relative errors
+        try:
+            e21a, e21ext = error_estimates(grid_one[2],
+                                           grid_two[2],
+                                           f_exact)
+        except ArithmeticError as e:
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the gcis
+        try:
+            gci_f, gci_c = gci(ratio, e21a, p)
+        except ArithmeticError as e:
+            warnings.warn(e)
+        
+        return f_exact, e21a, e21ext, gci_f, gci_c
     
     def _get_ratios(self):
         
@@ -222,15 +312,15 @@ class Convergence(object):
         simulations are in the asymptotic range."""
         
         # If the fine are coarse values are not calculated then they need to be
-        if self.grid_fine is None: self.get_fine_values()
-        if self.grid_coarse is None: self.get_coarse_values()
+        if self._grid_fine is None: self.get_fine_values()
+        if self._grid_coarse is None: self.get_coarse_values()
         
         # Initialise the ratios list
-        self.grid_ratios = []
+        self._grid_ratios = []
         
-        for shared, fine, coarse in zip(self.grid_shared,
-                                        self.grid_fine,
-                                        self.grid_coarse):
+        for shared, fine, coarse in zip(self._grid_shared,
+                                        self._grid_fine,
+                                        self._grid_coarse):
             
             # Set a default ratio
             ratio = None
@@ -248,90 +338,100 @@ class Convergence(object):
                 gci_fine_32 = coarse['gci_f']
                 
                 try:
-                    
-                    ratio = asymptotic_ratio(gci_fine_21, gci_fine_32,
+                    ratio = asymptotic_ratio(gci_fine_21,
+                                             gci_fine_32,
                                              ratio_21, p)
-                
                 except ArithmeticError as e:
-                    
-                    # log the error
-                    self._log.warning(e)
+                    warnings.warn(e)
             
             else:
                 
-                # log the error
-                self._log.warning('get_ratios: failed none_check')
-                self._log.warning('Some required result not available')
+                warnings.warn('get_ratios: failed none_check')
+                warnings.warn('Some required result not available')
             
             # Add the result to the list as a dictionary
-            self.grid_ratios.append({'assym_ratio' : ratio})
+            self._grid_ratios.append({'assym_ratio' : ratio})
     
-    def _get_shared(self):
+    def _make_attributes(self):
         
-        """ Record the refinement rations and the order of convergence for each
-        of the triplets in grid_trips.
-        """
-        
-        # Initialise the shared data list
-        self.grid_shared = []
+        grid_nspaces = {}
         
         for trip in self._grid_triplets:
             
-            # Calculate the refinement ratios
-            ratio_21 = float(trip[1][1] / trip[0][1])
-            ratio_32 = float(trip[2][1] / trip[1][1])
+            tripdex = self._grid_triplets.index(trip)
             
-            # Default p to None
-            p = None
+            grids_string = '%d %d %d' % (trip[0][0], trip[1][0], trip[2][0])
+            grids_sizes = [trip[0][1], trip[1][1], trip[2][1]]
+            grids_values = [trip[0][2], trip[1][2], trip[2][2]]
             
-            # Get order of convergence if possible
-            try:
+            # Add the shared and fine dictionaries
+            total_dict = dict(self._grid_shared[tripdex])
+            if self._grid_fine[tripdex] is not None:
+                total_dict.update(self._grid_fine[tripdex])
+            
+            nsdict = {"r21": total_dict['ratio_21'],
+                      "r32": total_dict['ratio_32']}
+            
+            if total_dict['p'] is not None:
+            
+                nsdict["e_approx"] = total_dict['e_a']
+                nsdict["e_extrap"] = total_dict['e_ext']
+                nsdict["f_exact"] = total_dict['f_exact']
+                nsdict["gci_coarse"] = total_dict['gci_c']
+                nsdict["gci_fine"] = total_dict['gci_f']
+                nsdict["p"] = total_dict['p']
+                nsdict["r21"] = total_dict['ratio_21']
+                nsdict["r32"] = total_dict['ratio_32']
                 
-                p = order_of_convergence(trip[0][2], trip[1][2], trip[2][2],
-                                     ratio_21, ratio_32)
+                if self._f_anal is not None:
+                    
+                    nsdict['e_analytic'] = total_dict['e_anal']
+                    nsdict['f_analytic'] = total_dict['f_anal']
+                    nsdict['f_delta'] = total_dict['f_delta']
             
-            except ArithmeticError as e:
-                
-                # log the error
-                self._log.warning(e)
+            fspace = argparse.Namespace(**nsdict)
             
-            # Make a dictionary
-            shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
-                           'p' : p}
+            # Add the shared and coarse dictionaries
+            total_dict = dict(self._grid_shared[tripdex])
+            if self._grid_fine[tripdex] is not None:
+                total_dict.update(self._grid_coarse[tripdex])
             
-            # Add the results to the list
-            self.grid_shared.append(shared_dict)
-    
-    def _get_values(self, grid_one, grid_two, ratio, p):
+            nsdict = {"r21": total_dict['ratio_21'],
+                      "r32": total_dict['ratio_32']}
+            
+            if total_dict['p'] is not None:
+            
+                nsdict["e_approx"] = total_dict['e_a']
+                nsdict["e_extrap"] = total_dict['e_ext']
+                nsdict["f_exact"] = total_dict['f_exact']
+                nsdict["gci_coarse"] = total_dict['gci_c']
+                nsdict["gci_fine"] = total_dict['gci_f']
+                nsdict["p"] = total_dict['p']
+                nsdict["r21"] = total_dict['ratio_21']
+                nsdict["r32"] = total_dict['ratio_32']
+            
+                if self._f_anal is not None:
+                    
+                    nsdict['e_analytic'] = total_dict['e_anal']
+                    nsdict['f_analytic'] = total_dict['f_anal']
+                    nsdict['f_delta'] = total_dict['f_delta']
+            
+            cspace = argparse.Namespace(**nsdict)
+            
+            assym_ratio = self._grid_ratios[tripdex]['assym_ratio']
+            
+            nspace = argparse.Namespace(**{"grids": grids_string,
+                                           "sizes": grids_sizes,
+                                           "values": grids_values,
+                                           "fine": fspace,
+                                           "coarse": cspace,
+                                           "asymptotic_ratio": assym_ratio})
+            
+            grid_nspaces[tripdex] = nspace
         
-        """ Get the values (for the given grids) of the 
-        extrapolated value, relative and extrapolated relative error and GCI 
-        fine and coarse. The refinment ratio and order of convergence, p, is
-        required.
-        """
+        self._grid_nspaces = grid_nspaces
         
-        # Default the values to None
-        f_exact = e21a = e21ext = gci_f = gci_c = None
-        
-        try:
-            
-            # Perform Richardson extrapolation to estimate a zero grid value.
-            f_exact = richardson_extrapolate(grid_one[2], grid_two[2],
-                                                ratio, p)
-                                        
-            # Get the approximate and extrapolated relative errors
-            e21a, e21ext = error_estimates(grid_one[2], grid_two[2],
-                                            f_exact)
-            
-            # Get the gcis
-            gci_f, gci_c = gci(ratio, e21a, p)
-        
-        except ArithmeticError as e:
-            
-            # log the error
-            self._log.warning(e)
-        
-        return f_exact, e21a, e21ext, gci_f, gci_c
+        return
     
     def _write_header(self, msgs):
         
@@ -349,21 +449,8 @@ class Convergence(object):
         msgs.append('     Grid Size     Quantity ')
         msgs.append('')
         
-        # Unpack the triplets. Take all 3 from the first trip and then the
-        # last from all the others.
-        trip_one = self._grid_triplets[0]
-        grid_list = []
-        for grid in trip_one:
-            grid_list.append((grid[1], grid[2]))
-        
-        trips_copy = self._grid_triplets[1:]
-        
-        for trip in trips_copy:
-            grid = trip[2]
-            grid_list.append((grid[1], grid[2]))
-        
         # Write out the grids
-        for grid in grid_list:
+        for grid in self._grids:
             msgs.append('%13.6f %13.6f ' % (grid[0], grid[1]))
             
         msgs.append('')
@@ -373,7 +460,7 @@ class Convergence(object):
     def _write_fine(self, msgs):
         
         # OK, get the strings for the table using the fine errors
-        tab_strings = self._write_errors_tab(self.grid_fine)
+        tab_strings = self._write_errors_tab(self._grid_fine)
         
         # Write to the file
         msgs.append('')
@@ -387,7 +474,7 @@ class Convergence(object):
     def _write_coarse(self, msgs):
         
         # OK, get the strings for the table using the fine errors
-        tab_strings = self._write_errors_tab(self.grid_coarse)
+        tab_strings = self._write_errors_tab(self._grid_coarse)
         
         # Write to the file
         msgs.append('')
@@ -403,14 +490,14 @@ class Convergence(object):
         record_headings = ['r21', 'r32', 'p', 'f_exact']
         head_keys = ['ratio_21', 'ratio_32', 'p', 'f_exact']
         
-        if self.f_anal is not None:
+        if self._f_anal is not None:
             record_headings += ["f_analytic", "f_delta"]
             head_keys += ["f_anal", "f_delta"]
         
         record_headings += ['e_approx', 'e_extrap']
         head_keys += ['e_a', 'e_ext']
         
-        if self.f_anal is not None:
+        if self._f_anal is not None:
             record_headings += ["e_analytic"]
             head_keys += ["e_anal"]
         
@@ -434,7 +521,7 @@ class Convergence(object):
             vals_list = []
             
             # Add the shared and fine dictionaries
-            total_dict = dict(self.grid_shared[tripdex])
+            total_dict = dict(self._grid_shared[tripdex])
             if errors_list[tripdex] is not None:
                 total_dict.update(errors_list[tripdex])
             
@@ -475,7 +562,7 @@ class Convergence(object):
             grids_string = '%d %d %d' % (trip[0][0], trip[1][0], trip[2][0])
             
             # Set up a list to store the values.
-            vals_list = [self.grid_ratios[tripdex]['assym_ratio']]
+            vals_list = [self._grid_ratios[tripdex]['assym_ratio']]
             
             # Build a record
             new_record = Record(record_heading, vals_list, grids_string)
@@ -495,14 +582,38 @@ class Convergence(object):
         
         return msgs
     
+    def __len__(self):
+        
+        if self._grid_nspaces is None:
+            result = 0
+        else:
+            result = len(self._grid_nspaces)
+        
+        return result
+    
+    def __getitem__(self, key):
+        
+        if self._grid_nspaces is None:
+            raise IndexError(key)
+        
+        if not isinstance(key, int):
+            raise TypeError(type(key))
+        
+        try:
+            nspace = self._grid_nspaces[key]
+        except KeyError:
+            raise IndexError(key)
+        
+        return nspace
+    
     def __str__(self):
         
         msgs = []
         
         msgs = self._write_header(msgs)
-        if self.grid_fine: msgs = self._write_fine(msgs)
-        if self.grid_coarse: msgs = self._write_coarse(msgs)
-        if self.grid_ratios: msgs = self._write_ratios(msgs)
+        if self._grid_fine: msgs = self._write_fine(msgs)
+        if self._grid_coarse: msgs = self._write_coarse(msgs)
+        if self._grid_ratios: msgs = self._write_ratios(msgs)
         
         return "\n".join(msgs)
 
@@ -560,11 +671,11 @@ def simple_read(file_name):
 
 def cl_interface():
     
-        # Prepare command line parser
+    # Prepare command line parser
     desStr = "Perform grid convergence study on input file."
     
     parser = argparse.ArgumentParser(description=desStr)
-            
+    
     parser.add_argument("-o", "--out",
                         type=str,
                         help=("output file path"),

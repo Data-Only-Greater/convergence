@@ -22,7 +22,7 @@ setup(name='convergence',
       packages=['convergence'],
       python_requires='>=2.7, !=3.9.*, <4',
       extras_require={
-        'test': ["pytest", "pytest-cov"]},
+        'test': ["pytest", "pytest-cov", "pytest-mock"]},
       entry_points = {'console_scripts': 
                   ['grid-convergence = convergence.interface:cl_interface']},
       classifiers=[

@@ -47,8 +47,8 @@ from math import log
 
 
 def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32, 
-                          omega=0.5, tol=1.E-4): #, start_p=1.):
-                              
+                          omega=0.5, tol=1.E-4, max_iter=1e6): #, start_p=1.):
+    
     """ Calculate the order of convergence values generated with three
     grids of reducing resolution (ie grid_1 is finest). The values of the grids
     are needed along with the ratios between them.
@@ -59,7 +59,7 @@ def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32,
     This has been modified to the method of Celik (2008).
     """
     
-    # Set a maximum residual and number of iterations
+    # Set a maximum residual
     max_res = 1.E6
     
     # calculate the epsilons.
@@ -80,10 +80,10 @@ def order_of_convergence (value_1, value_2, value_3, ratio_21, ratio_32,
     iterations = 0
     
     while abs(residual) > tol:
-    
+        
         # Break if it's all gone bad
-        if float(iterations) > max_res or residual > max_res:
-            ValueError('Residual out of range or too many iterations')
+        if iterations > max_iter or residual > max_res:
+            raise RuntimeError('Residual out of range or too many iterations')
         
         # Get the last value
         p0 = p1
