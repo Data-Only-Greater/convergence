@@ -264,3 +264,252 @@ def test_convergence_no_iter():
 def test_convergence_iter_bad_key(convergence):
     with pytest.raises(TypeError):
         convergence["a"]
+
+
+def test_get_shared_order_of_convergence_error(mocker):
+    
+    mocker.patch('convergence.interface.order_of_convergence',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_shared()
+    
+    assert convergence._grid_shared[0]["p"] is None
+
+
+def test_get_fine_values_richardson_extrapolate_error(mocker):
+    
+    mocker.patch('convergence.interface.richardson_extrapolate',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_fine_values()
+    
+    assert convergence._grid_fine[0]["f_exact"] is None
+    assert convergence._grid_fine[0]["f_delta"] is None
+
+
+def test_get_fine_values_error_estimates_error(mocker):
+    
+    mocker.patch('convergence.interface.error_estimates',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_fine_values()
+    
+    assert convergence._grid_fine[0]["e_a"] is None
+    assert convergence._grid_fine[0]["e_anal"] is None
+
+
+def test_get_fine_values_gci_error(mocker):
+    
+    mocker.patch('convergence.interface.gci',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_fine_values()
+    
+    assert convergence._grid_fine[0]["gci_f"] is None
+
+
+def test_get_coarse_values_richardson_extrapolate_error(mocker):
+    
+    mocker.patch('convergence.interface.richardson_extrapolate',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_coarse_values()
+    
+    assert convergence._grid_coarse[0]["f_exact"] is None
+    assert convergence._grid_coarse[0]["f_delta"] is None
+
+
+def test_get_coarse_values_error_estimates_error(mocker):
+    
+    mocker.patch('convergence.interface.error_estimates',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_coarse_values()
+    
+    assert convergence._grid_coarse[0]["e_a"] is None
+    assert convergence._grid_coarse[0]["e_anal"] is None
+
+
+def test_get_coarse_values_gci_error(mocker):
+    
+    mocker.patch('convergence.interface.gci',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+        
+    with pytest.warns(UserWarning):
+        convergence._get_coarse_values()
+    
+    assert convergence._grid_coarse[0]["gci_f"] is None
+
+
+@pytest.mark.parametrize("test_input",
+                         ['convergence.interface.asymptotic_ratio',
+                          'convergence.interface.gci'])
+def test_get_ratios_error(mocker, test_input):
+    
+    mocker.patch(test_input,
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    convergence._set_grids(main_list)
+    convergence._set_grid_triplets()
+    convergence._get_shared()
+    
+    with pytest.warns(UserWarning):
+        convergence._get_fine_values()
+        convergence._get_coarse_values()
+        convergence._get_ratios()
+    
+    assert convergence._grid_ratios[0]['assym_ratio'] is None
+
+
+def test_convergence_gci_error(mocker):
+    
+    mocker.patch('convergence.interface.gci',
+                 side_effect=ArithmeticError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids(main_list)
+
+    expected_lines = (
+'',
+'Number of grids to be examined = 3 ',
+'',
+'     Grid Size     Quantity ',
+'',
+'     1.000000      0.970500 ',
+'     2.000000      0.968540 ',
+'     4.000000      0.961780 ',
+'',
+'',
+'Discretisation errors for fine grids: ',
+'',
+'       Grids |   e_analytic |     e_approx |     e_extrap |   f_analytic | ',
+' ========================================================================= ',
+'       1 2 3 |     0.000824 |     0.002020 |     0.000824 |     0.971300 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |      f_delta |      f_exact |   gci_coarse |     gci_fine | ',
+' ========================================================================= ',
+'       1 2 3 |    -0.000000 |     0.971300 |              |              | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |            p |          r21 |          r32 | ',
+' ========================================================== ',
+'       1 2 3 |     1.786170 |     2.000000 |     2.000000 | ',
+' ---------------------------------------------------------- ',
+'',
+'',
+'Discretisation errors for coarse grids: ',
+'',
+'       Grids |   e_analytic |     e_approx |     e_extrap |   f_analytic | ',
+' ========================================================================= ',
+'       1 2 3 |     0.002842 |     0.006980 |     0.002842 |     0.971300 | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |      f_delta |      f_exact |   gci_coarse |     gci_fine | ',
+' ========================================================================= ',
+'       1 2 3 |    -0.000000 |     0.971300 |              |              | ',
+' ------------------------------------------------------------------------- ',
+'',
+'       Grids |            p |          r21 |          r32 | ',
+' ========================================================== ',
+'       1 2 3 |     1.786170 |     2.000000 |     2.000000 | ',
+' ---------------------------------------------------------- ',
+'',
+'',
+'Asymptotic ratio test: ',
+'',
+'           Grids | Asymptotic ratio | ',
+' ==================================== ',
+'           1 2 3 |                  | ',
+' ------------------------------------ ',
+'')
+    
+    for actual, expected in zip(str(convergence).split("\n"),
+                                expected_lines):
+        assert actual == expected
+
+
+def test_order_of_convergence_runtimeerror(mocker):
+    
+    mocker.patch('convergence.interface.order_of_convergence',
+                 side_effect=RuntimeError("mock"))
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence(f_anal=0.9713)
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids(main_list)
+    
+    assert str(convergence)
+
+
+def test_convergence_name():
+    
+    in_path = os.path.join(DATA_DIR_PATH, "prD.do")
+    main_list = simple_read(in_path)
+    convergence = Convergence("test")
+    convergence.add_grids(main_list)
+    
+    assert str(convergence)

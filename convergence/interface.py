@@ -144,7 +144,7 @@ class Convergence(object):
                                          trip[2][2],
                                          ratio_21,
                                          ratio_32)
-            except ArithmeticError as e:
+            except (ArithmeticError, RuntimeError) as e:
                 warnings.warn(e)
             
             # Make a dictionary
@@ -189,10 +189,17 @@ class Convergence(object):
             # If there is an anlytical value than do more work
             if self._f_anal is not None:
                 
-                f_delta = float(self._f_anal) - f_exact
-                e21dummy, e21_anal = error_estimates(trip[0][2],
-                                                     trip[1][2],
-                                                     float(self._f_anal))
+                f_delta = e21_anal = None
+                
+                if f_exact is not None:
+                    f_delta = float(self._f_anal) - f_exact
+                
+                try:
+                    _, e21_anal = error_estimates(trip[0][2],
+                                                  trip[1][2],
+                                                  float(self._f_anal))
+                except ArithmeticError as e:
+                    warnings.warn(e)
                 
                 # Add these to the dictionary
                 anal_dict = {'f_anal': float(self._f_anal), 
@@ -239,10 +246,17 @@ class Convergence(object):
             # If there is an anlytical value than do more work
             if self._f_anal is not None:
                 
-                f_delta = float(self._f_anal) - f_exact
-                e21dummy, e23_anal = error_estimates(trip[1][2],
-                                                     trip[2][2],
-                                                     float(self._f_anal))
+                f_delta = e23_anal = None
+                
+                if f_exact is not None:
+                    f_delta = float(self._f_anal) - f_exact
+                
+                try:
+                    _, e23_anal = error_estimates(trip[1][2],
+                                                  trip[2][2],
+                                                  float(self._f_anal))
+                except ArithmeticError as e:
+                    warnings.warn(e)
                 
                 # Add these to the dictionary
                 anal_dict = {'f_anal': float(self._f_anal), 
@@ -253,6 +267,44 @@ class Convergence(object):
             
             # Write the results to the list.
             self._grid_coarse.append(coarse_dict)
+    
+    def _get_values(self, grid_one, grid_two, ratio, p):
+        
+        """ Get the values (for the given grids) of the 
+        extrapolated value, relative and extrapolated relative error and GCI 
+        fine and coarse. The refinment ratio and order of convergence, p, is
+        required.
+        """
+        
+        # Default the values to None
+        f_exact = e21a = e21ext = gci_f = gci_c = None
+        
+        # Perform Richardson extrapolation to estimate a zero grid value.
+        try:
+            f_exact = richardson_extrapolate(grid_one[2],
+                                             grid_two[2],
+                                             ratio,
+                                             p)
+        except ArithmeticError as e:
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the approximate and extrapolated relative errors
+        try:
+            e21a, e21ext = error_estimates(grid_one[2],
+                                           grid_two[2],
+                                           f_exact)
+        except ArithmeticError as e:
+            warnings.warn(e)
+            return f_exact, e21a, e21ext, gci_f, gci_c
+        
+        # Get the gcis
+        try:
+            gci_f, gci_c = gci(ratio, e21a, p)
+        except ArithmeticError as e:
+            warnings.warn(e)
+        
+        return f_exact, e21a, e21ext, gci_f, gci_c
     
     def _get_ratios(self):
         
@@ -300,44 +352,6 @@ class Convergence(object):
             # Add the result to the list as a dictionary
             self._grid_ratios.append({'assym_ratio' : ratio})
     
-    def _get_values(self, grid_one, grid_two, ratio, p):
-        
-        """ Get the values (for the given grids) of the 
-        extrapolated value, relative and extrapolated relative error and GCI 
-        fine and coarse. The refinment ratio and order of convergence, p, is
-        required.
-        """
-        
-        # Default the values to None
-        f_exact = e21a = e21ext = gci_f = gci_c = None
-        
-        # Perform Richardson extrapolation to estimate a zero grid value.
-        try:
-            f_exact = richardson_extrapolate(grid_one[2],
-                                             grid_two[2],
-                                             ratio,
-                                             p)
-        except ArithmeticError as e:
-            warnings.warn(e)
-            return f_exact, e21a, e21ext, gci_f, gci_c
-        
-        # Get the approximate and extrapolated relative errors
-        try:
-            e21a, e21ext = error_estimates(grid_one[2],
-                                           grid_two[2],
-                                           f_exact)
-        except ArithmeticError as e:
-            warnings.warn(e)
-            return f_exact, e21a, e21ext, gci_f, gci_c
-        
-        # Get the gcis
-        try:
-            gci_f, gci_c = gci(ratio, e21a, p)
-        except ArithmeticError as e:
-            warnings.warn(e)
-        
-        return f_exact, e21a, e21ext, gci_f, gci_c
-    
     def _make_attributes(self):
         
         grid_nspaces = {}
@@ -355,20 +369,25 @@ class Convergence(object):
             if self._grid_fine[tripdex] is not None:
                 total_dict.update(self._grid_fine[tripdex])
             
-            nsdict = {"e_approx": total_dict['e_a'],
-                      "e_extrap": total_dict['e_ext'],
-                      "f_exact": total_dict['f_exact'],
-                      "gci_coarse": total_dict['gci_c'],
-                      "gci_fine": total_dict['gci_f'],
-                      "p": total_dict['p'],
-                      "r21": total_dict['ratio_21'],
+            nsdict = {"r21": total_dict['ratio_21'],
                       "r32": total_dict['ratio_32']}
             
-            if self._f_anal is not None:
+            if total_dict['p'] is not None:
+            
+                nsdict["e_approx"] = total_dict['e_a']
+                nsdict["e_extrap"] = total_dict['e_ext']
+                nsdict["f_exact"] = total_dict['f_exact']
+                nsdict["gci_coarse"] = total_dict['gci_c']
+                nsdict["gci_fine"] = total_dict['gci_f']
+                nsdict["p"] = total_dict['p']
+                nsdict["r21"] = total_dict['ratio_21']
+                nsdict["r32"] = total_dict['ratio_32']
                 
-                nsdict['e_analytic'] = total_dict['e_anal']
-                nsdict['f_analytic'] = total_dict['f_anal']
-                nsdict['f_delta'] = total_dict['f_delta']
+                if self._f_anal is not None:
+                    
+                    nsdict['e_analytic'] = total_dict['e_anal']
+                    nsdict['f_analytic'] = total_dict['f_anal']
+                    nsdict['f_delta'] = total_dict['f_delta']
             
             fspace = argparse.Namespace(**nsdict)
             
@@ -377,20 +396,25 @@ class Convergence(object):
             if self._grid_fine[tripdex] is not None:
                 total_dict.update(self._grid_coarse[tripdex])
             
-            nsdict = {"e_approx": total_dict['e_a'],
-                      "e_extrap": total_dict['e_ext'],
-                      "f_exact": total_dict['f_exact'],
-                      "gci_coarse": total_dict['gci_c'],
-                      "gci_fine": total_dict['gci_f'],
-                      "p": total_dict['p'],
-                      "r21": total_dict['ratio_21'],
+            nsdict = {"r21": total_dict['ratio_21'],
                       "r32": total_dict['ratio_32']}
             
-            if self._f_anal is not None:
-                
-                nsdict['e_analytic'] = total_dict['e_anal']
-                nsdict['f_analytic'] = total_dict['f_anal']
-                nsdict['f_delta'] = total_dict['f_delta']
+            if total_dict['p'] is not None:
+            
+                nsdict["e_approx"] = total_dict['e_a']
+                nsdict["e_extrap"] = total_dict['e_ext']
+                nsdict["f_exact"] = total_dict['f_exact']
+                nsdict["gci_coarse"] = total_dict['gci_c']
+                nsdict["gci_fine"] = total_dict['gci_f']
+                nsdict["p"] = total_dict['p']
+                nsdict["r21"] = total_dict['ratio_21']
+                nsdict["r32"] = total_dict['ratio_32']
+            
+                if self._f_anal is not None:
+                    
+                    nsdict['e_analytic'] = total_dict['e_anal']
+                    nsdict['f_analytic'] = total_dict['f_anal']
+                    nsdict['f_delta'] = total_dict['f_delta']
             
             cspace = argparse.Namespace(**nsdict)
             
