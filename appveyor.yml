@@ -36,7 +36,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update --quiet conda
   - conda info --all
-  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest
+  - conda create -n _convergence python=%PYTHON_VERSION% pip pytest pytest-mock
   - activate _convergence
   - pip install -e .
 
