@@ -26,4 +26,4 @@ env:
   - CODECOV_TOKEN="0a761bdf-6546-411f-88c8-dac96fc73df0"
 
 after_success:
-  - codecov
+  - '[ $TRAVIS_PYTHON_VERSION == "2.7" ] && codecov'

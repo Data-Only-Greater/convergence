@@ -233,8 +233,8 @@ errors:
 
 ## License
 
-Copyright 2011 SuperGen Marine Energy Research Consortium
-Copyright 2013 SuperGen UK Centre for Marine Energy Research
+Copyright 2011 SuperGen Marine Energy Research Consortium  
+Copyright 2013 SuperGen UK Centre for Marine Energy Research  
 Copyright 2017-2020 Mathew Topper
 
 This program is free software: you can redistribute it and/or modify it under 
