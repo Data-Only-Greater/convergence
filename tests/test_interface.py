@@ -513,3 +513,46 @@ def test_convergence_name():
     convergence.add_grids(main_list)
     
     assert str(convergence)
+
+
+def test_convergence_no_grids():
+    
+    convergence = Convergence()
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids([])
+    
+    lines = str(convergence).split("\n")
+    
+    assert len(lines) == 5
+    assert lines[1] == "Number of grids to be examined = 0 "
+    assert lines[-2] == " *** Insufficient grids for analysis *** "
+
+
+def test_convergence_one_grid():
+    
+    convergence = Convergence()
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids([(1, 0.5)])
+    
+    lines = str(convergence).split("\n")
+    
+    assert len(lines) == 9
+    assert lines[1] == "Number of grids to be examined = 1 "
+    assert lines[-2] == " *** Insufficient grids for analysis *** "
+
+
+def test_convergence_two_grids():
+    
+    convergence = Convergence()
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids([(1, 0.5),
+                               (0.5, 0.4)])
+    
+    lines = str(convergence).split("\n")
+    
+    assert len(lines) == 10
+    assert lines[1] == "Number of grids to be examined = 2 "
+    assert lines[-2] == " *** Insufficient grids for analysis *** "
