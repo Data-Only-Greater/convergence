@@ -96,6 +96,9 @@ class Convergence(object):
         sorted_grids = sorted(pre_sort, key=lambda grid: grid[0])
         self._grids = tuple(sorted_grids)
         
+        if len(self._grids) < 3:
+            warnings.warn("Insufficient grids for analysis")
+        
         return
     
     def _set_grid_triplets(self):
@@ -442,10 +445,11 @@ class Convergence(object):
             msgs.append('--- Examining metric: %24s --- ' % self.met_name)
             msgs.append('')
         
-        msgs.append('Number of grids to be examined = %d ' % 
-                                        (len(self._grid_triplets) + 2))
-        
+        msgs.append('Number of grids to be examined = %d ' % len(self._grids))
         msgs.append('')
+        
+        if len(self._grids) == 0: return msgs
+        
         msgs.append('     Grid Size     Quantity ')
         msgs.append('')
         
@@ -582,6 +586,15 @@ class Convergence(object):
         
         return msgs
     
+    def _write_trailer(self, msgs):
+        
+        if len(self._grid_triplets) > 0: return msgs
+        
+        msgs.append(' *** Insufficient grids for analysis *** ')
+        msgs.append('')
+        
+        return msgs
+    
     def __len__(self):
         
         if self._grid_nspaces is None:
@@ -614,14 +627,19 @@ class Convergence(object):
         if self._grid_fine: msgs = self._write_fine(msgs)
         if self._grid_coarse: msgs = self._write_coarse(msgs)
         if self._grid_ratios: msgs = self._write_ratios(msgs)
+        msgs = self._write_trailer(msgs)
         
         return "\n".join(msgs)
 
 
 def _triplets(lst):
+    
+    if len(lst) < 2: return
+    
     i = iter(lst)
     first = next(i)
     second = next(i)
+    
     for item in i:
         yield first, second, item
         first = second
