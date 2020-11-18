@@ -17,10 +17,6 @@ environment:
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
       PYTEST_DEPS: "mock pytest-mock"
-    - PYTHON_VERSION: 3.5
-      MINICONDA: C:\Miniconda-x64
-      ARCH: "64"
-      PYTEST_DEPS: "pytest-mock"
     - PYTHON_VERSION: 3.6
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
@@ -33,7 +29,10 @@ environment:
       MINICONDA: C:\Miniconda-x64
       ARCH: "64"
       PYTEST_DEPS: "pytest-mock"
-
+    - PYTHON_VERSION: 3.9
+      MINICONDA: C:\Miniconda-x64
+      ARCH: "64"
+      PYTEST_DEPS: "pytest-mock"
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 

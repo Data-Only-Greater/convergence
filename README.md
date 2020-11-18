@@ -6,10 +6,10 @@ Study.
 ******
 
 [![](https://img.shields.io/badge/python-2.7-blue.svg)](https://www.python.org/download/releases/2.7.0/) 
-[![](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/download/releases/3.5.0/) 
 [![](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/download/releases/3.6.0/) 
 [![](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/download/releases/3.7.0/) 
 [![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/download/releases/3.8.0/) 
+[![](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/download/releases/3.9.0/) 
 
 ![](https://img.shields.io/badge/platform-linux-lightgrey.svg)
 [![](https://img.shields.io/travis/com/Data-Only-Greater/convergence/master)](https://travis-ci.com/github/Data-Only-Greater/convergence)
@@ -41,7 +41,7 @@ projects. Watch this space.
 ## Installation
 
 The package requires no dependencies and is currently available for Pythons 
-2.7, 3.5, 3.6, 3.7 and 3.8.
+2.7, 3.6, 3.7, 3.8 and 3.9.
 
 The latest stable version of the package can be downloaded from PyPI using 
 [pip](https://packaging.python.org/tutorials/installing-packages/):
@@ -205,7 +205,7 @@ example:
 >>> len(convergence)
 1
 >>> convergence[0] # doctest:+ELLIPSIS
-Namespace(asymptotic_ratio=0.997980422462648, ...
+Namespace(...
 
 ```
 
