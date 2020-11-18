@@ -9,7 +9,7 @@ Study.
 [![](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/download/releases/3.6.0/) 
 [![](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/download/releases/3.7.0/) 
 [![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/download/releases/3.8.0/) 
-[![](https://img.shields.io/badge/python-3.5-blue.svg)](https://www.python.org/download/releases/3.9.0/) 
+[![](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/download/releases/3.9.0/) 
 
 ![](https://img.shields.io/badge/platform-linux-lightgrey.svg)
 [![](https://img.shields.io/travis/com/Data-Only-Greater/convergence/master)](https://travis-ci.com/github/Data-Only-Greater/convergence)
