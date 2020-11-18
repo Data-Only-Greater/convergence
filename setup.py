@@ -10,7 +10,7 @@ def readme():
         return f.read()
 
 setup(name='convergence',
-      version='0.2.0',
+      version='0.3.0',
       description=('A Python program to Perform Calculations Associated with '
                    'a Grid Convergence Study'),
       long_description=readme(),
@@ -20,7 +20,7 @@ setup(name='convergence',
       author_email='dataonlygreater@gmail.com',
       url='https://github.com/Data-Only-Greater/convergence',
       packages=['convergence'],
-      python_requires='>=2.7, !=3.9.*, <4',
+      python_requires='>=2.7, !=3.10.*, <4',
       extras_require={
         'test': ["pytest", "pytest-cov", "pytest-mock"]},
       entry_points = {'console_scripts': 
@@ -33,9 +33,9 @@ setup(name='convergence',
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering"],
       )
