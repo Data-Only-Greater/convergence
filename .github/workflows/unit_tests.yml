@@ -25,7 +25,7 @@ jobs:
       - name: Run tests
         run: |
           conda install -y mock pytest pytest-cov pytest-mock
-          pytest --cov=convergence tests
+          pytest --cov=convergence --cov-report xml tests
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
