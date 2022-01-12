@@ -595,6 +595,23 @@ class Convergence(object):
         
         return msgs
     
+    def get_resolution(self, gci, estimate="fine"):
+        
+        if not self._grid_coarse:
+            raise RuntimeError("Insufficient grids")
+        
+        if estimate == "fine":
+            gci23 = self[0].coarse.gci_fine
+        elif estimate == "coarse":
+            gci23 = self[0].coarse.gci_coarse
+        else:
+            raise ValueError("Unrecognised value passed to estimate. Should "
+                             "be one of 'fine' or 'coarse'")
+        
+        p = self[0].coarse.p
+        
+        return (gci / gci23) ** (1 / p)
+        
     def __len__(self):
         
         if self._grid_nspaces is None:

@@ -226,6 +226,26 @@ errors:
 
 ```
 
+### Required Grid Resolution
+
+To determine the required grid resolution for a given GCI value the
+`get_resolution` method can be used. For example:
+
+```python
+>>> convergence.get_resolution(0.001)
+0.49101700391658576
+
+```
+
+By default the GCI for the fine grid is used. To use the coarse grid estimate
+pass `"coarse"` as the second optional argument:
+
+```python
+>>> convergence.get_resolution(0.001, "coarse")
+0.2455085019582929
+
+```
+
 ## License
 
 Copyright 2011 SuperGen Marine Energy Research Consortium  
