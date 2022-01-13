@@ -10,3 +10,9 @@ filterwarnings = [
     "ignore::DeprecationWarning:pywintypes",
 ]
 doctest_optionflags = "NORMALIZE_WHITESPACE"
+
+[tool.semantic_release]
+version_pattern = [
+    'setup.cfg:version = (\d+\.\d+\.\d+)'
+]
+commit_parser = "semantic_release.history.emoji_parser"
