@@ -185,6 +185,33 @@ def test_convergence_anal_str(convergence_anal):
                                 expected_lines):
         assert actual == expected
 
+@pytest.mark.parametrize("estimate, expected", [
+                            ("fine", 0.49101700391658576),
+                            ("coarse", 0.2455085019582929)])
+def test_get_resolution(convergence, estimate, expected):
+    assert convergence.get_resolution(0.001, estimate) == expected
+
+
+def test_get_resolution_insufficient_grids():
+    
+    convergence = Convergence()
+    
+    with pytest.warns(UserWarning):
+        convergence.add_grids([(1, 0.5)])
+    
+    with pytest.raises(RuntimeError) as excinfo:
+        convergence.get_resolution(0.001)
+    
+    assert "Insufficient grids" in str(excinfo)
+
+
+def test_get_resolution_bad_estimate(convergence):
+    
+    with pytest.raises(ValueError) as excinfo:
+        convergence.get_resolution(0.001, "mock")
+    
+    assert "Unrecognised value passed to estimate" in str(excinfo)
+
 
 @pytest.mark.parametrize("test_input,expected",
                          [(('asymptotic_ratio', None), 0.997980422462648),
