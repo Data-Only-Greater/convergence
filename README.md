@@ -12,6 +12,7 @@ Study.
 [![documentation](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml/badge.svg)](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml)
 
 [![](https://img.shields.io/codecov/c/github/Data-Only-Greater/convergence)](https://codecov.io/gh/Data-Only-Greater/convergence)
+[![](https://img.shields.io/pypi/v/convergence)](https://pypi.org/project/convergence/)
 
 ## Introduction
 
