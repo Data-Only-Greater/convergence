@@ -1,9 +1,6 @@
 name: Semantic Release
 
-on:
-  workflow_run:
-    workflows: ["Unit Tests", "Documentation"]
-    types: [completed]
+on: [push]
 
 jobs:
   release:
@@ -12,10 +9,16 @@ jobs:
     if: github.repository == 'Data-Only-Greater/convergence'
     
     steps:
+    - name: Wait for tests to succeed
+      uses: lewagon/wait-on-check-action@v1.0.0
+      with:
+        ref: ${{ github.ref }}
+        running-workflow-name: 'Semantic Release'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    
     - name: Python Semantic Release
       uses: relekang/python-semantic-release@master
       with:
