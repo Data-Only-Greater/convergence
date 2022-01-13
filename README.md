@@ -5,17 +5,11 @@ Study.
 
 ******
 
-[![](https://img.shields.io/badge/python-2.7-blue.svg)](https://www.python.org/downloads/release/python-270/) 
-[![](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/) 
-[![](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/) 
-[![](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) 
-[![](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/) 
+[![python](https://img.shields.io/badge/dynamic/yaml?label=python&query=%24.jobs.pytest.strategy.matrix[%27python-version%27][:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmaster%2F.github%2Fworkflows%2Funit_tests.yml)](https://www.python.org/)
+[![platform](https://img.shields.io/badge/dynamic/yaml?label=os&query=%24.jobs.pytest.strategy.matrix.os[:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmaster%2F.github%2Fworkflows%2Funit_tests.yml)](https://en.wikipedia.org/wiki/Usage_share_of_operating_systems#Desktop_and_laptop_computers)
 
-![](https://img.shields.io/badge/platform-linux-lightgrey.svg)
-[![](https://img.shields.io/travis/com/Data-Only-Greater/convergence/master)](https://travis-ci.com/github/Data-Only-Greater/convergence)
-
-![](https://img.shields.io/badge/platform-windows-lightgrey.svg)
-[![](https://img.shields.io/appveyor/build/DataOnlyGreater/convergence/master)](https://ci.appveyor.com/project/DataOnlyGreater/convergence/branch/master)
+[![unit tests](https://github.com/Data-Only-Greater/convergence/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/Data-Only-Greater/convergence/actions/workflows/unit_tests.yml)
+[![documentation](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml/badge.svg)](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml)
 
 [![](https://img.shields.io/codecov/c/github/Data-Only-Greater/convergence)](https://codecov.io/gh/Data-Only-Greater/convergence)
 
