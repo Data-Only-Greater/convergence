@@ -186,8 +186,8 @@ def test_convergence_anal_str(convergence_anal):
         assert actual == expected
 
 @pytest.mark.parametrize("estimate, expected", [
-                            ("fine", 0.49101700391658576),
-                            ("coarse", 0.2455085019582929)])
+                            ("fine", 0.9831461212423797),
+                            ("coarse", 0.49157306062118994)])
 def test_get_resolution(convergence, estimate, expected):
     assert convergence.get_resolution(0.001, estimate) == expected
 

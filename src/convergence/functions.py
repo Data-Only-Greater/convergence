@@ -161,3 +161,13 @@ def asymptotic_ratio(gci_fine_21, gci_fine_32, ratio_21, p):
     ratio = ratio_21**p * ( gci_fine_21 / gci_fine_32)
     
     return ratio
+
+def required_resolution(gci, gci12, p, h1):
+    """Calculate the grid resolution required to achieve a given GCI, given
+    a fine-grid GCI, order of convergence, p, and the grid resolution of the
+    fine grid, h1.
+    """
+    
+    r = (gci12 / float(gci)) ** (1 / float(p))
+    
+    return h1 / r
