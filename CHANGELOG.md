@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.1 (2022-01-14)
+### :bug:
+* :bug: Fix use of incorrect formula for Interface.get_resolution ([#11](https://github.com/Data-Only-Greater/convergence/issues/11)) ([`d645154`](https://github.com/Data-Only-Greater/convergence/commit/d6451542541e8bf391e4f176eacb4ca5e4880bc6))
+
+### Other
+* Don't allow the actions-user to trigger the release event  ([`3a23699`](https://github.com/Data-Only-Greater/convergence/commit/3a236991c5584297d997f0a5076e7e744cdc8f8a))
+
 ## v0.4.0 (2022-01-14)
 ### :chart_with_upwards_trend:
 * :chart_with_upwards_trend: Add get_resolution method to Interface. ([#10](https://github.com/Data-Only-Greater/convergence/issues/10)) ([`3421a9f`](https://github.com/Data-Only-Greater/convergence/commit/3421a9ff2aaed9931de1d720dbf35e7cec1e1df0))
