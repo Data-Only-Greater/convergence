@@ -7,7 +7,9 @@ jobs:
     name: Publish the package
     runs-on: ubuntu-latest
     concurrency: release
-    if: github.repository == 'Data-Only-Greater/convergence'
+    if: |
+        github.repository == 'Data-Only-Greater/convergence' &&
+        github.event.pusher.name != 'actions-user'
     steps:
     - name: Wait for tests to succeed
       uses: lewagon/wait-on-check-action@v1.0.0
