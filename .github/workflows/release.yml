@@ -1,16 +1,17 @@
 name: Semantic Release
 
 on: [push]
+  branches:
+    - 'master'
 
 jobs:
   release:
     name: Publish the package
     runs-on: ubuntu-latest
-    concurrency: release
-    if: |
-        github.repository == 'Data-Only-Greater/convergence' &&
-        github.event.pusher.name != 'actions-user'
+    if: github.repository == 'Data-Only-Greater/convergence'
     steps:
+    - name: Expose git commit data
+      uses: rlespinasse/git-commit-data-action@v1
     - name: Wait for tests to succeed
       uses: lewagon/wait-on-check-action@v1.0.0
       with:
@@ -18,13 +19,16 @@ jobs:
         running-workflow-name: 'Publish the package'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 10
+      if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
         token: ${{ secrets.ADMIN_TOKEN }}
+      if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - name: Python Semantic Release
       uses: relekang/python-semantic-release@master
       with:
         github_token: ${{ secrets.ADMIN_TOKEN }}
         repository_username: __token__
         repository_password: ${{ secrets.PYPI_TOKEN }}
+      if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
