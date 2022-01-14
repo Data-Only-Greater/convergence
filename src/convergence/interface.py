@@ -49,7 +49,8 @@ from .functions import (order_of_convergence,
                         richardson_extrapolate,
                         error_estimates,
                         gci,
-                        asymptotic_ratio)
+                        asymptotic_ratio,
+                        required_resolution)
 from .tables import Record, Table
 
 
@@ -601,16 +602,17 @@ class Convergence(object):
             raise RuntimeError("Insufficient grids")
         
         if estimate == "fine":
-            gci23 = self[0].coarse.gci_fine
+            gci12 = self[0].fine.gci_fine
         elif estimate == "coarse":
-            gci23 = self[0].coarse.gci_coarse
+            gci12 = self[0].fine.gci_coarse
         else:
             raise ValueError("Unrecognised value passed to estimate. Should "
                              "be one of 'fine' or 'coarse'")
         
         p = self[0].coarse.p
+        h1 = self._grids[0][0]
         
-        return (gci / gci23) ** (1 / p)
+        return required_resolution(gci, gci12, p, h1)
         
     def __len__(self):
         

@@ -233,7 +233,7 @@ To determine the required grid resolution for a given GCI value the
 
 ```python
 >>> convergence.get_resolution(0.001)
-0.49101700391658576
+0.9831461212423797
 
 ```
 
@@ -242,9 +242,20 @@ pass `"coarse"` as the second optional argument:
 
 ```python
 >>> convergence.get_resolution(0.001, "coarse")
-0.2455085019582929
+0.49157306062118994
 
 ```
+
+Note that the equation in the NASA tutorial is incorrect. If 
+<img src="https://render.githubusercontent.com/render/math?math=\text{GCI}*">
+is the desired accuracy and <img src="https://render.githubusercontent.com/render/math?math=h*">
+is the required resolution, then:
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\displaystyle r = \left( \frac{\text{GCI}_{12}}{\text{GCI}*} \right)^{p^{-1}}">
+</br></br>
+<img src="https://render.githubusercontent.com/render/math?math=\displaystyle h* = \frac{h_1}{r}">
+</p>
 
 ## License
 
