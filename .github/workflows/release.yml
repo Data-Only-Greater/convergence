@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'Data-Only-Greater/convergence'
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.ADMIN_TOKEN }}
     - name: Expose git commit data
       uses: rlespinasse/git-commit-data-action@v1
     - name: Wait for tests to succeed
@@ -20,11 +24,6 @@ jobs:
         running-workflow-name: 'Publish the package'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 10
-      if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.ADMIN_TOKEN }}
       if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - name: Python Semantic Release
       uses: relekang/python-semantic-release@master
