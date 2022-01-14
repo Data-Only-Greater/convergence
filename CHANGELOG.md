@@ -2,6 +2,15 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.2 (2022-01-14)
+### :speech_balloon:
+* :speech_balloon: Render equations in grey to support dark BGs ([#12](https://github.com/Data-Only-Greater/convergence/issues/12)) ([`72700f5`](https://github.com/Data-Only-Greater/convergence/commit/72700f527ab49286bf2749e2cc4a1d8dd335bfa8))
+
+### Other
+* Need to checkout first to get commit info  ([`d44fdc9`](https://github.com/Data-Only-Greater/convergence/commit/d44fdc9f4f8ac68ebcf27ed2d48f16a4346e5f30))
+* Fix syntax error in release action  ([`6b3acf9`](https://github.com/Data-Only-Greater/convergence/commit/6b3acf96f1e824d4da9baadb5c0057a2b0c9e2c5))
+* Put branch and commiter name guard on release action  ([`b949b57`](https://github.com/Data-Only-Greater/convergence/commit/b949b57f3537897581b5778d1290eddceb1e8130))
+
 ## v0.4.1 (2022-01-14)
 ### :bug:
 * :bug: Fix use of incorrect formula for Interface.get_resolution ([#11](https://github.com/Data-Only-Greater/convergence/issues/11)) ([`d645154`](https://github.com/Data-Only-Greater/convergence/commit/d6451542541e8bf391e4f176eacb4ca5e4880bc6))
