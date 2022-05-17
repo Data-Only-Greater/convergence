@@ -36,7 +36,7 @@ projects. Watch this space.
 ## Installation
 
 The package requires no dependencies and is currently available for Pythons 
-2.7, 3.6, 3.7, 3.8 and 3.9.
+2.7, 3.7, 3.8, 3.9 and 3.10.
 
 The latest stable version of the package can be downloaded from PyPI using 
 [pip](https://packaging.python.org/tutorials/installing-packages/):
@@ -261,7 +261,7 @@ is the required resolution, then:
 
 Copyright 2011 SuperGen Marine Energy Research Consortium  
 Copyright 2013 SuperGen UK Centre for Marine Energy Research  
-Copyright 2017-2020 Mathew Topper
+Copyright 2017-2022 Mathew Topper
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
