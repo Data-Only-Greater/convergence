@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-05-17)
+### :children_crossing:
+* :children_crossing: Bump to version 0.5.0  ([`1334a07`](https://github.com/Data-Only-Greater/convergence/commit/1334a07519122c270430af1845d4b09c72f6ae34))
+
+### :egg:
+* :egg: Try, try again  ([`5618e84`](https://github.com/Data-Only-Greater/convergence/commit/5618e847048e11b8d25adf4557488835a623b041))
+* :egg: Try to fix semantic release and bump to version 0.5.0  ([`a2abbb5`](https://github.com/Data-Only-Greater/convergence/commit/a2abbb5d9fe6519771bfed9a2130064675cdf46a))
+
+### Other
+* Add Python 3.10 support and remove Python 3.6 ([#13](https://github.com/Data-Only-Greater/convergence/issues/13)) ([`55fd62e`](https://github.com/Data-Only-Greater/convergence/commit/55fd62eff46aa03cae2d684e7b874589c6657485))
+
 ## v0.4.2 (2022-01-14)
 ### :speech_balloon:
 * :speech_balloon: Render equations in grey to support dark BGs ([#12](https://github.com/Data-Only-Greater/convergence/issues/12)) ([`72700f5`](https://github.com/Data-Only-Greater/convergence/commit/72700f527ab49286bf2749e2cc4a1d8dd335bfa8))
