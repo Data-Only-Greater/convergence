@@ -26,7 +26,7 @@ jobs:
         wait-interval: 10
       if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - name: Python Semantic Release
-      uses: relekang/python-semantic-release@v7
+      uses: relekang/python-semantic-release@v7.28.1
       with:
         github_token: ${{ secrets.ADMIN_TOKEN }}
         repository_username: __token__
