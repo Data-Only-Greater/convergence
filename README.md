@@ -246,16 +246,14 @@ pass `"coarse"` as the second optional argument:
 
 ```
 
-Note that the equation in the NASA tutorial is incorrect. If 
-<img src="https://render.githubusercontent.com/render/math?math=\color{grey}\text{GCI}*">
-is the desired accuracy and <img src="https://render.githubusercontent.com/render/math?math=\color{grey}h*">
-is the required resolution, then:
+Note that the equation in the NASA tutorial is incorrect. If  $\text{GCI}^{\*}$ is
+the desired accuracy and $h^{\*}$ is the required resolution, then:
 
-<p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\displaystyle\color{grey} r = \left( \frac{\text{GCI}_{12}}{\text{GCI}*} \right)^{p^{-1}}">
-</br></br>
-<img src="https://render.githubusercontent.com/render/math?math=\displaystyle\color{grey} h* = \frac{h_1}{r}">
-</p>
+$$r = \left( \frac{\text{GCI}_{12}}{\text{GCI}^{\*}} \right)^{p^{-1}}$$
+
+and
+
+$$h^{\*} = \frac{h_1}{r}$$
 
 ## License
 
