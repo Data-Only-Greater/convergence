@@ -2,6 +2,17 @@
 
 
 
+## v0.6.2 (2024-04-09)
+
+### :robot:
+
+* :robot: do build outside of semantic release ([`ffb20d2`](https://github.com/Data-Only-Greater/convergence/commit/ffb20d21295b565af9b6e11c19bf18998f4bd537))
+
+* :robot: add python build package ([`ab904e5`](https://github.com/Data-Only-Greater/convergence/commit/ab904e5a8fd1fae0ba50fe196ea07ad3ffbe7cc9))
+
+* :robot: add build command ([`9718542`](https://github.com/Data-Only-Greater/convergence/commit/971854253cba129e959b78edc05dfac50e87c32a))
+
+
 ## v0.6.1 (2024-04-09)
 
 ### :robot:
