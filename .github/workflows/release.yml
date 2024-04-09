@@ -18,10 +18,10 @@ jobs:
     - name: Expose git commit data
       uses: rlespinasse/git-commit-data-action@v1
     - name: Wait for tests to succeed
-      uses: lewagon/wait-on-check-action@v1.0.0
+      uses: lewagon/wait-on-check-action@v1.3.4
       with:
         ref: ${{ github.ref }}
-        running-workflow-name: 'Publish the package'
+        check-name: 'Publish the package'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         wait-interval: 10
       if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
