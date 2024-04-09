@@ -24,7 +24,7 @@ jobs:
           conda info
       - name: Install package
         run: |
-          pip install --no-deps -e .
+          pip install --no-deps .
       - name: Run tests
         run: |
           conda install -y mock pytest pytest-cov pytest-mock
