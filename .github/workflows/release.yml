@@ -9,9 +9,14 @@ jobs:
   release:
     name: Publish the package
     runs-on: ubuntu-latest
+    concurrency: release
+    permissions:
+      id-token: write
+      contents: write
     if: github.repository == 'Data-Only-Greater/convergence'
+    
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.ADMIN_TOKEN }}
@@ -26,9 +31,14 @@ jobs:
         wait-interval: 10
       if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - name: Python Semantic Release
-      uses: relekang/python-semantic-release@v7.28.1
+      uses: python-semantic-release/python-semantic-release@master
       with:
         github_token: ${{ secrets.ADMIN_TOKEN }}
-        repository_username: __token__
-        repository_password: ${{ secrets.PYPI_TOKEN }}
-      if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      if: steps.release.outputs.released == 'true' && env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
+    - name: Publish package distributions to GitHub Releases
+      uses: python-semantic-release/upload-to-gh-release@main
+      if: steps.release.outputs.released == 'true' && env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
+      with:
+        github_token: ${{ secrets.ADMIN_TOKEN }}
