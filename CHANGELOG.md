@@ -2,6 +2,13 @@
 
 
 
+## v0.6.4 (2024-04-09)
+
+### :goal_net:
+
+* :goal_net: print_function is not needed anymore ([`d35ed3f`](https://github.com/Data-Only-Greater/convergence/commit/d35ed3f57e7262b4d9a87e1ad91e05331d386f1b))
+
+
 ## v0.6.3 (2024-04-09)
 
 ### :robot:
