@@ -83,7 +83,6 @@ list of pairs, i.e `[(size1, value1), (size2, value2), ...]`. Example usage
 is:
 
 ```python
->>> from __future__ import print_function
 >>> from convergence import Convergence
 >>> grids = [(1.000000, 0.970500),
 ...          (2.000000, 0.968540),
@@ -259,7 +258,7 @@ $$h^{\*} = \frac{h_1}{r}$$
 
 Copyright 2011 SuperGen Marine Energy Research Consortium  
 Copyright 2013 SuperGen UK Centre for Marine Energy Research  
-Copyright 2017-2022 Mathew Topper
+Copyright 2017-2024 Mathew Topper
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 

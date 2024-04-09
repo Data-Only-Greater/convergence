@@ -9,8 +9,6 @@ jobs:
   release:
     name: Create release and publish
     runs-on: ubuntu-latest
-    outputs:
-      released: ${{ steps.release.outputs.released }}
     permissions:
       id-token: write
       contents: write
