@@ -31,6 +31,7 @@ jobs:
         wait-interval: 10
       if: env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
     - name: Python Semantic Release
+      id: release
       uses: python-semantic-release/python-semantic-release@master
       with:
         github_token: ${{ secrets.ADMIN_TOKEN }}
