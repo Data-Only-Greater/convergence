@@ -36,7 +36,7 @@ projects. Watch this space.
 ## Installation
 
 The package requires no dependencies and is currently available for Pythons 
-2.7, 3.7, 3.8, 3.9 and 3.10.
+3.8, 3.9, 3.10 and 3.11.
 
 The latest stable version of the package can be downloaded from PyPI using 
 [pip](https://packaging.python.org/tutorials/installing-packages/):
