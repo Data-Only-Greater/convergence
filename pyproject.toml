@@ -34,7 +34,9 @@ Homepage = "https://github.com/Data-Only-Greater/convergence"
 Issues = "https://github.com/Data-Only-Greater/convergence/issues"
 
 [tool.coverage.run]
-source = "src/convergence"
+source = [
+    "src/convergence"
+]
 
 [tool.pytest.ini_options]
 filterwarnings = [
