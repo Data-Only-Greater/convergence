@@ -37,9 +37,9 @@ jobs:
         github_token: ${{ secrets.ADMIN_TOKEN }}
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-      if: steps.release.outputs.released == 'true' && env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
+      if: steps.release.outputs.released == 'true'
     - name: Publish package distributions to GitHub Releases
       uses: python-semantic-release/upload-to-gh-release@main
-      if: steps.release.outputs.released == 'true' && env.GIT_COMMIT_COMMITTER_NAME != 'github-actions'
+      if: steps.release.outputs.released == 'true'
       with:
         github_token: ${{ secrets.ADMIN_TOKEN }}
