@@ -12,7 +12,7 @@ filterwarnings = [
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
 [tool.semantic_release]
-version_variables  = [
+version_variables = [
     'setup.cfg:version'
 ]
-commit_parser = "semantic_release.history.emoji_parser"
+commit_parser = "emoji"
