@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: ['2.7', '3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10']
     defaults:
       run:
         shell: bash -l {0}
@@ -27,7 +27,6 @@ jobs:
           pip install --no-deps .
       - name: Run tests
         run: |
-          pip install coverage[toml]
           conda install -y mock pytest pytest-cov pytest-mock
           pytest --cov=convergence --cov-report xml tests
       - name: Upload coverage to Codecov
