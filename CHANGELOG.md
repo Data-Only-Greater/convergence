@@ -2,6 +2,13 @@
 
 
 
+## v0.6.1 (2024-04-09)
+
+### :robot:
+
+* :robot: fix package uploads ([`d3f0043`](https://github.com/Data-Only-Greater/convergence/commit/d3f0043b84389a3dceb838ce365b9424ce9e303f))
+
+
 ## v0.6.0 (2024-04-09)
 
 ### :iphone:
