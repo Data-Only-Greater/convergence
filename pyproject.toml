@@ -43,7 +43,6 @@ filterwarnings = [
 doctest_optionflags = "NORMALIZE_WHITESPACE"
 
 [tool.semantic_release]
-build_command = "python -m build"
 version_toml = [
     "pyproject.toml:project.version",
 ]
