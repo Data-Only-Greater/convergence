@@ -149,7 +149,7 @@ class Convergence(object):
                                          ratio_21,
                                          ratio_32)
             except (ArithmeticError, RuntimeError) as e:
-                warnings.warn(e)
+                warnings.warn(str(e))
             
             # Make a dictionary
             shared_dict = {'ratio_21' : ratio_21, 'ratio_32' : ratio_32,
@@ -203,7 +203,7 @@ class Convergence(object):
                                                   trip[1][2],
                                                   float(self._f_anal))
                 except ArithmeticError as e:
-                    warnings.warn(e)
+                    warnings.warn(str(e))
                 
                 # Add these to the dictionary
                 anal_dict = {'f_anal': float(self._f_anal), 
@@ -260,7 +260,7 @@ class Convergence(object):
                                                   trip[2][2],
                                                   float(self._f_anal))
                 except ArithmeticError as e:
-                    warnings.warn(e)
+                    warnings.warn(str(e))
                 
                 # Add these to the dictionary
                 anal_dict = {'f_anal': float(self._f_anal), 
@@ -290,7 +290,7 @@ class Convergence(object):
                                              ratio,
                                              p)
         except ArithmeticError as e:
-            warnings.warn(e)
+            warnings.warn(str(e))
             return f_exact, e21a, e21ext, gci_f, gci_c
         
         # Get the approximate and extrapolated relative errors
@@ -299,14 +299,14 @@ class Convergence(object):
                                            grid_two[2],
                                            f_exact)
         except ArithmeticError as e:
-            warnings.warn(e)
+            warnings.warn(str(e))
             return f_exact, e21a, e21ext, gci_f, gci_c
         
         # Get the gcis
         try:
             gci_f, gci_c = gci(ratio, e21a, p)
         except ArithmeticError as e:
-            warnings.warn(e)
+            warnings.warn(str(e))
         
         return f_exact, e21a, e21ext, gci_f, gci_c
     
@@ -346,7 +346,7 @@ class Convergence(object):
                                              gci_fine_32,
                                              ratio_21, p)
                 except ArithmeticError as e:
-                    warnings.warn(e)
+                    warnings.warn(str(e))
             
             else:
                 
