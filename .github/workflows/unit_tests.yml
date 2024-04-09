@@ -27,7 +27,8 @@ jobs:
           pip install --no-deps .
       - name: Run tests
         run: |
-          conda install -y coverage[toml] mock pytest pytest-cov pytest-mock
+          pip install coverage[toml]
+          conda install -y mock pytest pytest-cov pytest-mock
           pytest --cov=convergence --cov-report xml tests
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
