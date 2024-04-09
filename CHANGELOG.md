@@ -2,6 +2,13 @@
 
 
 
+## v0.6.3 (2024-04-09)
+
+### :robot:
+
+* :robot: try and publish the correct version number ([`806e3c5`](https://github.com/Data-Only-Greater/convergence/commit/806e3c5c7f8002e1d303512c932110d2db5097da))
+
+
 ## v0.6.2 (2024-04-09)
 
 ### :robot:
