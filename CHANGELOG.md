@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.6.6 (2024-11-18)
+
+### :robot:
+
+- :robot: Stop explicitly naming Python versions in README
+  ([`24e14e1`](https://github.com/Data-Only-Greater/convergence/commit/24e14e1747913cbe3830f9a9dcd69af73cc18135))
+
+
 ## v0.6.5 (2024-11-18)
 
 ### :robot:
