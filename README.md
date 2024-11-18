@@ -5,8 +5,8 @@ Study.
 
 ******
 
-[![python](https://img.shields.io/badge/dynamic/yaml?label=python&query=%24.jobs.pytest.strategy.matrix[%27python-version%27][:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmaster%2F.github%2Fworkflows%2Funit_tests.yml)](https://www.python.org/)
-[![platform](https://img.shields.io/badge/dynamic/yaml?label=os&query=%24.jobs.pytest.strategy.matrix.os[:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmaster%2F.github%2Fworkflows%2Funit_tests.yml)](https://en.wikipedia.org/wiki/Usage_share_of_operating_systems#Desktop_and_laptop_computers)
+[![python](https://img.shields.io/badge/dynamic/yaml?label=python&query=%24.jobs.pytest.strategy.matrix[%27python-version%27][:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmain%2F.github%2Fworkflows%2Funit_tests.yml)](https://www.python.org/)
+[![platform](https://img.shields.io/badge/dynamic/yaml?label=os&query=%24.jobs.pytest.strategy.matrix.os[:]&url=https%3A%2F%2Fraw.githubusercontent.com%2FData-Only-Greater%2Fconvergence%2Fmain%2F.github%2Fworkflows%2Funit_tests.yml)](https://en.wikipedia.org/wiki/Usage_share_of_operating_systems#Desktop_and_laptop_computers)
 
 [![unit tests](https://github.com/Data-Only-Greater/convergence/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/Data-Only-Greater/convergence/actions/workflows/unit_tests.yml)
 [![documentation](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml/badge.svg)](https://github.com/Data-Only-Greater/convergence/actions/workflows/docs.yml)
