@@ -50,7 +50,7 @@ downloading the source code, and using the command prompt as follows:
 
 ```
 cd /path/to/convergence
-python setup.py install
+pip install --editable .
 ```
 
 Note that the stable version may not contain all of the features found in the
@@ -241,7 +241,7 @@ pass `"coarse"` as the second optional argument:
 
 ```python
 >>> convergence.get_resolution(0.001, "coarse")
-0.49157306062118994
+0.9831461212423799
 
 ```
 
