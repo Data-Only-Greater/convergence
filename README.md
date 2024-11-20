@@ -241,7 +241,7 @@ pass `"coarse"` as the second optional argument:
 
 ```python
 >>> convergence.get_resolution(0.001, "coarse")
-0.49157306062118994
+0.9831461212423799
 
 ```
 

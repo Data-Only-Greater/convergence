@@ -603,14 +603,16 @@ class Convergence(object):
         
         if estimate == "fine":
             gci12 = self[0].fine.gci_fine
+            h1 = self._grids[0][0]
         elif estimate == "coarse":
             gci12 = self[0].fine.gci_coarse
+            h1 = self._grids[1][0]
         else:
             raise ValueError("Unrecognised value passed to estimate. Should "
                              "be one of 'fine' or 'coarse'")
         
         p = self[0].coarse.p
-        h1 = self._grids[0][0]
+        
         
         return required_resolution(gci, gci12, p, h1)
         
