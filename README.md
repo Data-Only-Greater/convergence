@@ -50,7 +50,7 @@ downloading the source code, and using the command prompt as follows:
 
 ```
 cd /path/to/convergence
-python setup.py install
+pip install --editable .
 ```
 
 Note that the stable version may not contain all of the features found in the
