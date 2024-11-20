@@ -1,6 +1,18 @@
 # CHANGELOG
 
 
+## v0.6.7 (2024-11-20)
+
+### :bug:
+
+- :bug: Fix get_resolution using coarse GCI
+  ([#16](https://github.com/Data-Only-Greater/convergence/pull/16),
+  [`4e94653`](https://github.com/Data-Only-Greater/convergence/commit/4e94653dd7799f362cb13df1b235dea2bf4b13d7))
+
+When using the coarse GCI to calculate the required resolution using `get_resolution`, $h_1$ was set
+  to the fine grid resolution, rather than the coarse grid.
+
+
 ## v0.6.6 (2024-11-18)
 
 ### :robot:
